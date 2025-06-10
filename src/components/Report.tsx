@@ -1,5 +1,6 @@
 import React from "react";
 import type { Flight } from "./FlightCard";
+import ThemeToggle from "./ThemeToggle";
 
 interface ReportProps {
   flight: Flight;
@@ -51,7 +52,8 @@ export default function Report({ flight, onClose }: ReportProps) {
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
             Reporte de Operaciones
           </h2>
-          <div>
+          <div className="flex items-center space-x-2">
+            <ThemeToggle />
             <button
               className="mr-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
               onClick={handlePrint}

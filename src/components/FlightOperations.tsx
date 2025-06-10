@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import type { Flight } from "./FlightCard";
+import ThemeToggle from "./ThemeToggle";
 
 interface FlightOperationsProps {
   flight: Flight;
@@ -119,9 +120,12 @@ export default function FlightOperations({
   return (
     <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
       <div className="mb-6 border-b pb-4 border-gray-200 dark:border-gray-700">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-          Operaciones de Vuelo: {flight.flightNumber}
-        </h2>
+        <div className="flex justify-between items-center mb-2">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+            Operaciones de Vuelo: {flight.flightNumber}
+          </h2>
+          <ThemeToggle />
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-gray-700 dark:text-gray-300">
           <p>
             <span className="font-medium">Aerolínea:</span> {flight.airline}
