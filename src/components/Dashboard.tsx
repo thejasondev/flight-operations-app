@@ -300,6 +300,22 @@ export default function Dashboard() {
 
               <form onSubmit={handleAddFlight}>
                 <div className="mb-4">
+                  <label htmlFor="airline" className="block text-gray-700 dark:text-gray-300 mb-1">
+                    Aerolínea
+                  </label>
+                  <input
+                    type="text"
+                    id="airline"
+                    name="airline"
+                    value={formData.airline}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    placeholder="Ej: American Airlines"
+                    required
+                  />
+                </div>
+
+                <div className="mb-4">
                   <label
                     htmlFor="flightNumber"
                     className="block text-gray-700 dark:text-gray-300 mb-1"
@@ -313,26 +329,7 @@ export default function Dashboard() {
                     value={formData.flightNumber}
                     onChange={handleInputChange}
                     className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                    placeholder="Ej: AA123"
-                    required
-                  />
-                </div>
-
-                <div className="mb-4">
-                  <label
-                    htmlFor="airline"
-                    className="block text-gray-700 dark:text-gray-300 mb-1"
-                  >
-                    Aerolínea
-                  </label>
-                  <input
-                    type="text"
-                    id="airline"
-                    name="airline"
-                    value={formData.airline}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                    placeholder="Ej: American Airlines"
+                    placeholder="Ej: 123/124"
                     required
                   />
                 </div>
@@ -384,10 +381,7 @@ export default function Dashboard() {
                 </div>
 
                 <div className="mb-4">
-                  <label
-                    htmlFor="eta"
-                    className="block text-gray-700 dark:text-gray-300 mb-1"
-                  >
+                  <label htmlFor="eta" className="block text-gray-700 dark:text-gray-300 mb-1">
                     ETA (Hora Estimada de Arribo)
                   </label>
                   <div className={datePickerCustomStyles.datePickerContainer}>
@@ -414,10 +408,7 @@ export default function Dashboard() {
                 </div>
 
                 <div className="mb-4">
-                  <label
-                    htmlFor="etd"
-                    className="block text-gray-700 dark:text-gray-300 mb-1"
-                  >
+                  <label htmlFor="etd" className="block text-gray-700 dark:text-gray-300 mb-1">
                     ETD (Hora Estimada de Salida)
                   </label>
                   <div className={datePickerCustomStyles.datePickerContainer}>
@@ -459,12 +450,12 @@ export default function Dashboard() {
                 <h2 className="text-lg font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white flex items-center">
                   <span className="mr-2">Pendientes</span>
                   <span className="px-2 py-1 bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100 rounded-full text-sm">
-                    {pendingFlights.filter(f => f.status === "pending").length}
+                    {pendingFlights.filter((f) => f.status === 'pending').length}
                   </span>
                 </h2>
                 <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
                   {pendingFlights
-                    .filter(f => f.status === "pending")
+                    .filter((f) => f.status === 'pending')
                     .map((flight) => (
                       <FlightCard
                         key={flight.id}
@@ -473,7 +464,7 @@ export default function Dashboard() {
                         onDelete={() => confirmDeleteFlight(flight.id, 'pending')}
                       />
                     ))}
-                  {pendingFlights.filter(f => f.status === "pending").length === 0 && (
+                  {pendingFlights.filter((f) => f.status === 'pending').length === 0 && (
                     <p className="text-gray-500 dark:text-gray-400 text-center italic py-4">
                       No hay vuelos pendientes
                     </p>
@@ -515,9 +506,9 @@ export default function Dashboard() {
                 </h2>
                 <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
                   {completedFlights.map((flight) => (
-                    <FlightCard 
-                      key={flight.id} 
-                      flight={flight} 
+                    <FlightCard
+                      key={flight.id}
+                      flight={flight}
                       onDelete={() => confirmDeleteFlight(flight.id, 'completed')}
                     />
                   ))}
@@ -540,26 +531,48 @@ export default function Dashboard() {
       )}
 
       {/* Report Modal */}
-      {showReport && reportFlight && (
-        <Report flight={reportFlight} onClose={handleCloseReport} />
-      )}
+      {showReport && reportFlight && <Report flight={reportFlight} onClose={handleCloseReport} />}
 
       {/* Delete Confirmation Modal */}
       {showDeleteModal && flightToDeleteDetails && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-xl max-w-md w-full mx-4 transition-all transform animate-fadeIn" role="document">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 modal-backdrop"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-title"
+        >
+          <div
+            className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-xl max-w-md w-full mx-4 transition-all transform animate-fadeIn"
+            role="document"
+          >
             <div className="text-center mb-4">
               <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900 mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-red-600 dark:text-red-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-red-600 dark:text-red-300"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
                 </svg>
               </div>
-              <h3 id="modal-title" className="text-lg font-bold text-gray-900 dark:text-white mb-2">Confirmar eliminación</h3>
+              <h3 id="modal-title" className="text-lg font-bold text-gray-900 dark:text-white mb-2">
+                Confirmar eliminación
+              </h3>
               <p className="text-gray-600 dark:text-gray-300 mb-1">
                 ¿Está seguro que desea eliminar el vuelo?
               </p>
               <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg mb-4 mt-3">
-                <p className="font-semibold text-gray-800 dark:text-gray-200">{flightToDeleteDetails.flightNumber}</p>
+                <p className="font-semibold text-gray-800 dark:text-gray-200">
+                  {flightToDeleteDetails.flightNumber}
+                </p>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   {flightToDeleteDetails.airline} - {flightToDeleteDetails.destination}
                 </p>
@@ -593,36 +606,69 @@ export default function Dashboard() {
 
       {/* Flight Switch Confirmation Modal */}
       {showSwitchModal && flightToSwitchDetails && inProgressFlightDetails && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="switch-modal-title">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-xl max-w-md w-full mx-4 transition-all transform animate-fadeIn" role="document">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 modal-backdrop"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="switch-modal-title"
+        >
+          <div
+            className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-xl max-w-md w-full mx-4 transition-all transform animate-fadeIn"
+            role="document"
+          >
             <div className="text-center mb-4">
               <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 dark:bg-blue-900 mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600 dark:text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-blue-600 dark:text-blue-300"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                  />
                 </svg>
               </div>
-              <h3 id="switch-modal-title" className="text-lg font-bold text-gray-900 dark:text-white mb-2">Cambiar vuelo en progreso</h3>
+              <h3
+                id="switch-modal-title"
+                className="text-lg font-bold text-gray-900 dark:text-white mb-2"
+              >
+                Cambiar vuelo en progreso
+              </h3>
               <p className="text-gray-600 dark:text-gray-300 mb-3">
                 Ya hay un vuelo en progreso. ¿Desea cambiar al nuevo vuelo?
               </p>
-              
+
               <div className="flex mb-4">
                 <div className="flex-1 bg-gray-100 dark:bg-gray-700 p-3 rounded-l-lg border-r border-gray-200 dark:border-gray-600">
-                  <p className="font-medium text-xs text-gray-500 dark:text-gray-400 mb-1">Vuelo actual</p>
-                  <p className="font-semibold text-gray-800 dark:text-gray-200">{inProgressFlightDetails.flightNumber}</p>
+                  <p className="font-medium text-xs text-gray-500 dark:text-gray-400 mb-1">
+                    Vuelo actual
+                  </p>
+                  <p className="font-semibold text-gray-800 dark:text-gray-200">
+                    {inProgressFlightDetails.flightNumber}
+                  </p>
                   <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
                     {inProgressFlightDetails.airline}
                   </p>
                 </div>
                 <div className="flex-1 bg-gray-100 dark:bg-gray-700 p-3 rounded-r-lg">
-                  <p className="font-medium text-xs text-gray-500 dark:text-gray-400 mb-1">Nuevo vuelo</p>
-                  <p className="font-semibold text-gray-800 dark:text-gray-200">{flightToSwitchDetails.flightNumber}</p>
+                  <p className="font-medium text-xs text-gray-500 dark:text-gray-400 mb-1">
+                    Nuevo vuelo
+                  </p>
+                  <p className="font-semibold text-gray-800 dark:text-gray-200">
+                    {flightToSwitchDetails.flightNumber}
+                  </p>
                   <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
                     {flightToSwitchDetails.airline}
                   </p>
                 </div>
               </div>
-              
+
               <p className="text-sm text-gray-500 dark:text-gray-400 italic">
                 El vuelo actual volverá a su estado pendiente
               </p>
@@ -651,13 +697,14 @@ export default function Dashboard() {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-center items-center text-center md:justify-between">
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-2 md:mb-0">
-              © {new Date().getFullYear()} Panel de Operaciones Aéreas. Todos los derechos reservados.
+              © {new Date().getFullYear()} Panel de Operaciones Aéreas. Todos los derechos
+              reservados.
             </p>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Desarrollado por{" "}
-              <a 
-                href="https://thejasondev.vercel.app" 
-                target="_blank" 
+              Desarrollado por{' '}
+              <a
+                href="https://thejasondev.vercel.app"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium transition-colors"
                 aria-label="Portfolio de TheJasonDev"

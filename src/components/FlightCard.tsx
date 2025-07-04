@@ -8,7 +8,9 @@ export interface Flight {
   date?: string;
   eta: string;
   etd: string;
-  status: "pending" | "in-progress" | "completed";
+  ata?: string;
+  atd?: string;
+  status: 'pending' | 'in-progress' | 'completed';
   operations?: Record<string, { start: string; end: string }>;
   notes?: string;
 }
