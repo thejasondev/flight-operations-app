@@ -19,9 +19,10 @@ interface FlightCardProps {
   flight: Flight;
   onClick?: () => void;
   onDelete?: () => void;
+  onViewReport?: () => void;
 }
 
-export default function FlightCard({ flight, onClick, onDelete }: FlightCardProps) {
+export default function FlightCard({ flight, onClick, onDelete, onViewReport }: FlightCardProps) {
   // Determine card styling based on status
   const getCardClasses = () => {
     const baseClasses = "bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-4 cursor-pointer hover:shadow-lg transition-all border-l-4 hover-card-effect";
@@ -40,6 +41,14 @@ export default function FlightCard({ flight, onClick, onDelete }: FlightCardProp
     e.stopPropagation(); // Prevent the click from bubbling up to the card
     if (onDelete) {
       onDelete();
+    }
+  };
+
+  // Function to handle view report button click without triggering the card click
+  const handleViewReportClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent the click from bubbling up to the card
+    if (onViewReport) {
+      onViewReport();
     }
   };
 
@@ -82,6 +91,18 @@ export default function FlightCard({ flight, onClick, onDelete }: FlightCardProp
           <span className="text-sm px-2 py-1 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100">
             {flight.airline}
           </span>
+          {flight.status === 'completed' && onViewReport && (
+            <button 
+              onClick={handleViewReportClick}
+              className="text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 p-1 rounded-full hover:bg-green-100 dark:hover:bg-green-900 transition-colors"
+              aria-label="Ver reporte del vuelo"
+              title="Ver reporte del vuelo"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </button>
+          )}
           {onDelete && (
             <button 
               onClick={handleDeleteClick}
