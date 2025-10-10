@@ -164,25 +164,6 @@ export default function FlightOperations({
 
 return (
   <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
-    <div className="mb-6 border-b pb-4 border-gray-200 dark:border-gray-700">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-0">
-          Operaciones de Vuelo: {flight.flightNumber}
-        </h2>
-      </div>
-      <div className="grid grid-cols-1 gap-2 text-gray-700 dark:text-gray-300">
-        <p className="flex items-center">
-          <span className="font-medium w-24">Aerolínea:</span> {flight.airline}
-        </p>
-        <p className="flex items-center">
-          <span className="font-medium w-24">Destino:</span> {flight.destination}
-        </p>
-        <p className="flex items-center">
-          <span className="font-medium w-24">ETA/ETD:</span> {flight.eta} / {flight.etd}
-        </p>
-      </div>
-    </div>
-
     <div className="mb-6">
       <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
         Operaciones
