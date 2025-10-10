@@ -19,7 +19,7 @@ export default function FlightForm({ onSubmit, onCancel, isSubmitting = false }:
     'Cubana de Aviación', 'Havanatur', 'Blue Panorama Airlines',
     'Avianca', 'LATAM', 'Copa Airlines', 'American Airlines', 'Delta Air Lines',
     'United Airlines', 'Air France', 'Lufthansa', 'British Airways', 'Iberia',
-    'KLM', 'Emirates', 'Qatar Airways', 'Turkish Airlines', 'Condor'
+    'KLM', 'Emirates', 'Qatar Airways', 'Turkish Airlines', 'Condor', 'World2Fly', 'Copa Airlines', 'Aeromexico', 'Conviasa', 'Rutaca Airlines'
   ];
 
   const commonDestinations = [
@@ -37,7 +37,7 @@ export default function FlightForm({ onSubmit, onCancel, isSubmitting = false }:
     'Buenos Aires (EZE)', 'Santiago (SCL)', 'Caracas (CCS)', 'Panamá (PTY)',
     'Cancún (CUN)', 'Punta Cana (PUJ)', 'Kingston (KIN)', 'Nassau (NAS)',
     'Miami (MIA)', 'Nueva York (JFK)', 'Los Ángeles (LAX)', 'Chicago (ORD)',
-    'Atlanta (ATL)', 'Dallas (DFW)', 'Boston (BOS)', 'Washington (DCA)'
+    'Atlanta (ATL)', 'Dallas (DFW)', 'Boston (BOS)', 'Washington (DCA)', 'Lisboa (LIS)', ''
   ];
 
   // Hook personalizado para la lógica del formulario

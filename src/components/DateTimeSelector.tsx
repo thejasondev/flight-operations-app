@@ -237,9 +237,15 @@ export default function DateTimeSelector({
               <div className="grid grid-cols-7 gap-1">
                 {days.map((day, index) => {
                   const isCurrentMonth = day.getMonth() === currentMonth.getMonth();
-                  const isSelected = selectedDate && day.toDateString() === selectedDate.toDateString();
+                  const isSelected = Boolean(selectedDate && day.toDateString() === selectedDate.toDateString());
                   const isToday = day.toDateString() === new Date().toDateString();
-                  const isDisabled = (minDate && day < minDate) || (maxDate && day > maxDate);
+                  
+                  // Compare dates without time for proper date comparison
+                  const dayWithoutTime = new Date(day.getFullYear(), day.getMonth(), day.getDate());
+                  const minDateWithoutTime = minDate ? new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate()) : null;
+                  const maxDateWithoutTime = maxDate ? new Date(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate()) : null;
+                  
+                  const isDisabled = Boolean((minDateWithoutTime && dayWithoutTime < minDateWithoutTime) || (maxDateWithoutTime && dayWithoutTime > maxDateWithoutTime));
 
                   return (
                     <button
