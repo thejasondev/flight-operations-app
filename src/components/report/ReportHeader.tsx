@@ -14,9 +14,6 @@ export default function ReportHeader({ onPrint, onClose }: ReportHeaderProps) {
           Reporte de Operaciones
         </h2>
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-2">
-          <div className="flex justify-center sm:justify-start">
-            <ThemeToggle />
-          </div>
           <div className="flex gap-2">
             <button
               className="flex-1 sm:flex-none px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-colors text-sm sm:text-base font-medium"
