@@ -1,7 +1,7 @@
 {
   "name": "Panel Operaciones Aéreas",
-  "short_name": "Panel OPS",
-  "description": "Sistema profesional de gestión de operaciones aéreas para coordinadores de vuelo",
+  "short_name": "VRA OPS",
+  "description": "Sistema profesional de gestión de operaciones aéreas para coordinadores de vuelo en tiempo real.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f9fafb",
