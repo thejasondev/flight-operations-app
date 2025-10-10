@@ -161,7 +161,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+    <div className="bg-gray-50 dark:bg-gray-900 transition-colors">
       {/* Header */}
       <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
@@ -231,8 +231,8 @@ export default function Dashboard() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+      <main className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-6 xl:gap-8">
           {/* Pending Flights */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="p-4 sm:p-6">
@@ -242,7 +242,7 @@ export default function Dashboard() {
                   {pendingFlights.filter(f => f.status === 'pending').length}
                 </span>
               </h2>
-              <div className="space-y-3 sm:space-y-4 max-h-[50vh] sm:max-h-[60vh] overflow-y-auto pr-1 sm:pr-2">
+              <div className="space-y-3 sm:space-y-4 max-h-[45vh] sm:max-h-[50vh] lg:max-h-[55vh] overflow-y-auto pr-1 sm:pr-2">
                 {pendingFlights.filter(f => f.status === 'pending').map((flight) => (
                   <FlightCard
                     key={flight.id}
@@ -280,7 +280,7 @@ export default function Dashboard() {
                   {pendingFlights.filter(f => f.status === 'in-progress').length}
                 </span>
               </h2>
-              <div className="space-y-3 sm:space-y-4 max-h-[50vh] sm:max-h-[60vh] overflow-y-auto pr-1 sm:pr-2">
+              <div className="space-y-3 sm:space-y-4 max-h-[45vh] sm:max-h-[50vh] lg:max-h-[55vh] overflow-y-auto pr-1 sm:pr-2">
                 {pendingFlights.filter(f => f.status === 'in-progress').map((flight) => (
                   <FlightCard
                     key={flight.id}
@@ -312,7 +312,7 @@ export default function Dashboard() {
                   {completedFlights.length}
                 </span>
               </h2>
-              <div className="space-y-3 sm:space-y-4 max-h-[50vh] sm:max-h-[60vh] overflow-y-auto pr-1 sm:pr-2">
+              <div className="space-y-3 sm:space-y-4 max-h-[45vh] sm:max-h-[50vh] lg:max-h-[55vh] overflow-y-auto pr-1 sm:pr-2">
                 {completedFlights.map((flight) => (
                   <FlightCard
                     key={flight.id}

@@ -1,6 +1,7 @@
 /* Import styles - must be first */
 @import './images.css';
 @import './logo.css';
+@import './footer.css';
 
 @tailwind base;
 @tailwind components;
