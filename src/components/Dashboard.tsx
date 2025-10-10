@@ -163,12 +163,12 @@ export default function Dashboard() {
   return (
     <div className="bg-gray-50 dark:bg-gray-900 transition-colors">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 relative">
+        <div className="max-w-7xl mx-auto px-0 sm:px-6 lg:px-8">
           {/* Mobile Header */}
-          <div className="flex flex-col space-y-3 py-4 sm:hidden">
-            {/* Top row: Logo and title */}
-            <div className="flex items-center justify-center">
+          <div className="sm:hidden mobile-header-container">
+            {/* Top section: Logo and title */}
+            <div className="flex items-center justify-center py-5 px-0">
               <div className="logo-container">
                 <img 
                   src="/Panel OPS.webp" 
@@ -181,22 +181,60 @@ export default function Dashboard() {
               </div>
             </div>
             
-            {/* Bottom row: Theme toggle and add button */}
-            <div className="flex items-center justify-between">
-              <div className="flex-1"></div>
-              <div className="flex items-center space-x-3">
-                <ThemeToggle />
+            {/* Action buttons section */}
+            <div className="mobile-action-section border-t border-gray-100 dark:border-gray-600 px-4 py-4">
+              <div className="flex items-center justify-center space-x-4">
+                
+                {/* Theme Toggle with label */}
+                <div className="mobile-theme-toggle-container flex flex-col items-center space-y-1">
+                  <ThemeToggle />
+                  <span className="text-xs mobile-stats-label">
+                    Modo
+                  </span>
+                </div>
+                
+                {/* Separator */}
+                <div className="w-px h-10 bg-gradient-to-b from-transparent via-gray-300 to-transparent dark:via-gray-500"></div>
+                
+                {/* Add Flight Button - Enhanced */}
                 <button
                   onClick={() => setShowFlightForm(true)}
-                  className="inline-flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-colors font-medium text-sm"
+                  className="mobile-add-flight-btn group relative inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all duration-200 font-semibold text-sm min-w-[140px]"
                 >
-                  <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  <div className="absolute inset-0 bg-white/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+                  <svg className="w-5 h-5 mr-2 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                   </svg>
-                  Nuevo Vuelo
+                  <span className="relative z-10">Nuevo Vuelo</span>
+                  
+                  {/* Subtle glow effect */}
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-400 to-blue-500 opacity-0 group-hover:opacity-20 blur-sm transition-opacity duration-200"></div>
                 </button>
               </div>
-              <div className="flex-1"></div>
+              
+              {/* Quick stats or status indicator */}
+              <div className="mobile-stats-indicator flex items-center justify-center mt-4 pt-4 border-t border-gray-200 dark:border-gray-600">
+                <div className="flex items-center space-x-6 text-xs">
+                  <div className="flex items-center space-x-2">
+                    <div className="mobile-stats-dot pulse w-2.5 h-2.5 bg-yellow-400 rounded-full"></div>
+                    <span className="mobile-stats-label font-medium">
+                      {pendingFlights.filter(f => f.status === 'pending').length} Pendientes
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="mobile-stats-dot pulse w-2.5 h-2.5 bg-blue-400 rounded-full"></div>
+                    <span className="mobile-stats-label font-medium">
+                      {pendingFlights.filter(f => f.status === 'in-progress').length} En Progreso
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="mobile-stats-dot w-2.5 h-2.5 bg-green-400 rounded-full"></div>
+                    <span className="mobile-stats-label font-medium">
+                      {completedFlights.length} Completados
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 

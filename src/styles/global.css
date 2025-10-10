@@ -2,6 +2,7 @@
 @import './images.css';
 @import './logo.css';
 @import './footer.css';
+@import './mobile-header.css';
 
 @tailwind base;
 @tailwind components;
