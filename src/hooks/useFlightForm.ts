@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import type { Flight } from '../components/FlightCard';
+import { searchAircraftModels, getAircraftByAirline } from '../constants/aircraftData';
 
 interface FlightFormData {
   flightNumber: string;
   airline: string;
+  aircraftType: string;
   origin: string;
   destination: string;
   secondDestination?: string;
@@ -22,6 +24,7 @@ export const useFlightForm = ({ onSubmit, commonAirlines, commonDestinations }: 
   const [formData, setFormData] = useState<FlightFormData>({
     flightNumber: '',
     airline: '',
+    aircraftType: '',
     origin: '',
     destination: '',
     secondDestination: '',
@@ -36,10 +39,12 @@ export const useFlightForm = ({ onSubmit, commonAirlines, commonDestinations }: 
   
   // Estados para autocompletado
   const [airlineSuggestions, setAirlineSuggestions] = useState<string[]>([]);
+  const [aircraftTypeSuggestions, setAircraftTypeSuggestions] = useState<string[]>([]);
   const [originSuggestions, setOriginSuggestions] = useState<string[]>([]);
   const [destinationSuggestions, setDestinationSuggestions] = useState<string[]>([]);
   const [secondDestinationSuggestions, setSecondDestinationSuggestions] = useState<string[]>([]);
   const [showAirlineSuggestions, setShowAirlineSuggestions] = useState(false);
+  const [showAircraftTypeSuggestions, setShowAircraftTypeSuggestions] = useState(false);
   const [showOriginSuggestions, setShowOriginSuggestions] = useState(false);
   const [showDestinationSuggestions, setShowDestinationSuggestions] = useState(false);
   const [showSecondDestinationSuggestions, setShowSecondDestinationSuggestions] = useState(false);
@@ -103,6 +108,22 @@ export const useFlightForm = ({ onSubmit, commonAirlines, commonDestinations }: 
       } else {
         setShowAirlineSuggestions(false);
       }
+      
+      // Limpiar tipo de avión cuando cambia la aerolínea
+      if (formData.aircraftType) {
+        setFormData(prev => ({ ...prev, aircraftType: '' }));
+      }
+    }
+
+    // Autocompletado para tipo de avión
+    if (field === 'aircraftType') {
+      if (value.length > 0) {
+        const filtered = searchAircraftModels(value, formData.airline || undefined);
+        setAircraftTypeSuggestions(filtered.slice(0, 8));
+        setShowAircraftTypeSuggestions(true);
+      } else {
+        setShowAircraftTypeSuggestions(false);
+      }
     }
 
     // Autocompletado para origen
@@ -149,6 +170,8 @@ export const useFlightForm = ({ onSubmit, commonAirlines, commonDestinations }: 
     setFormData(prev => ({ ...prev, [field]: value }));
     if (field === 'airline') {
       setShowAirlineSuggestions(false);
+    } else if (field === 'aircraftType') {
+      setShowAircraftTypeSuggestions(false);
     } else if (field === 'origin') {
       setShowOriginSuggestions(false);
     } else if (field === 'destination') {
@@ -174,6 +197,7 @@ export const useFlightForm = ({ onSubmit, commonAirlines, commonDestinations }: 
     const flightData: Omit<Flight, 'id' | 'status'> = {
       flightNumber: formData.flightNumber.trim().toUpperCase(),
       airline: formData.airline.trim(),
+      aircraftType: formData.aircraftType.trim() || undefined,
       destination: routeString,
       eta: etaTime ? etaTime.toTimeString().slice(0, 5) : '',
       etd: etdTime ? etdTime.toTimeString().slice(0, 5) : '',
@@ -188,6 +212,7 @@ export const useFlightForm = ({ onSubmit, commonAirlines, commonDestinations }: 
     setFormData({
       flightNumber: '',
       airline: '',
+      aircraftType: '',
       origin: '',
       destination: '',
       secondDestination: '',
@@ -210,12 +235,14 @@ export const useFlightForm = ({ onSubmit, commonAirlines, commonDestinations }: 
     isDoubleDestination,
     suggestions: {
       airline: airlineSuggestions,
+      aircraftType: aircraftTypeSuggestions,
       origin: originSuggestions,
       destination: destinationSuggestions,
       secondDestination: secondDestinationSuggestions,
     },
     showSuggestions: {
       airline: showAirlineSuggestions,
+      aircraftType: showAircraftTypeSuggestions,
       origin: showOriginSuggestions,
       destination: showDestinationSuggestions,
       secondDestination: showSecondDestinationSuggestions,
@@ -226,6 +253,7 @@ export const useFlightForm = ({ onSubmit, commonAirlines, commonDestinations }: 
     setIsDoubleDestination,
     setSuggestionsVisibility: {
       airline: setShowAirlineSuggestions,
+      aircraftType: setShowAircraftTypeSuggestions,
       origin: setShowOriginSuggestions,
       destination: setShowDestinationSuggestions,
       secondDestination: setShowSecondDestinationSuggestions,

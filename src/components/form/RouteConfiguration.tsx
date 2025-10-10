@@ -59,9 +59,6 @@ export default function RouteConfiguration({
     <div className="space-y-4">
       {/* Header with improved mobile layout */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-          Configuración de Ruta
-        </label>
         
         {/* Mobile-optimized checkbox */}
         <div className="flex items-center justify-center sm:justify-end">

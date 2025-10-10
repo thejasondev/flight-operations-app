@@ -17,9 +17,7 @@ export default function FlightForm({ onSubmit, onCancel, isSubmitting = false }:
     'Air Canada', 'Air Transat', 'WestJet', 'Sunwing Airlines',
     'Nordwind Airlines', 'Azur Air', 'Rossiya Airlines', 'Aeroflot',
     'Cubana de Aviación', 'Havanatur', 'Blue Panorama Airlines',
-    'Avianca', 'LATAM', 'Copa Airlines', 'American Airlines', 'Delta Air Lines',
-    'United Airlines', 'Air France', 'Lufthansa', 'British Airways', 'Iberia',
-    'KLM', 'Emirates', 'Qatar Airways', 'Turkish Airlines', 'Condor', 'World2Fly', 'Copa Airlines', 'Aeromexico', 'Conviasa', 'Rutaca Airlines'
+    'Avianca', 'LATAM', 'Copa Airlines', 'American Airlines', 'Delta Air Lines', 'United Airlines', 'Air France', 'Lufthansa', 'British Airways', 'Iberia', 'KLM', 'Emirates', 'Qatar Airways', 'Turkish Airlines', 'Condor', 'World2Fly', 'Copa Airlines', 'Aeromexico', 'Conviasa', 'Rutaca Airlines', 'Plus Ultra'
   ];
 
   const commonDestinations = [
@@ -37,7 +35,7 @@ export default function FlightForm({ onSubmit, onCancel, isSubmitting = false }:
     'Buenos Aires (EZE)', 'Santiago (SCL)', 'Caracas (CCS)', 'Panamá (PTY)',
     'Cancún (CUN)', 'Punta Cana (PUJ)', 'Kingston (KIN)', 'Nassau (NAS)',
     'Miami (MIA)', 'Nueva York (JFK)', 'Los Ángeles (LAX)', 'Chicago (ORD)',
-    'Atlanta (ATL)', 'Dallas (DFW)', 'Boston (BOS)', 'Washington (DCA)', 'Lisboa (LIS)', ''
+    'Atlanta (ATL)', 'Dallas (DFW)', 'Boston (BOS)', 'Washington (DCA)', 'Lisboa (LIS)', 'Katowice (KTW)'
   ];
 
   // Hook personalizado para la lógica del formulario
@@ -90,16 +88,22 @@ export default function FlightForm({ onSubmit, onCancel, isSubmitting = false }:
         <FlightBasicInfo
           flightData={{
             flightNumber: formData.flightNumber,
-            airline: formData.airline
+            airline: formData.airline,
+            aircraftType: formData.aircraftType
           }}
           onDataChange={handleInputChange}
           airlineSuggestions={suggestions.airline}
+          aircraftTypeSuggestions={suggestions.aircraftType}
           showAirlineSuggestions={showSuggestions.airline}
+          showAircraftTypeSuggestions={showSuggestions.aircraftType}
           onAirlineSuggestionsVisibilityChange={setSuggestionsVisibility.airline}
+          onAircraftTypeSuggestionsVisibilityChange={setSuggestionsVisibility.aircraftType}
           onAirlineSuggestionSelect={(value) => selectSuggestion('airline', value)}
+          onAircraftTypeSuggestionSelect={(value) => selectSuggestion('aircraftType', value)}
           errors={{
             flightNumber: errors.flightNumber,
-            airline: errors.airline
+            airline: errors.airline,
+            aircraftType: errors.aircraftType
           }}
           airlines={commonAirlines}
         />

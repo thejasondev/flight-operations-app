@@ -21,6 +21,11 @@ export default function FlightInfoSection({ flight }: FlightInfoSectionProps) {
           <p className="break-words">
             <span className="font-medium">Aerolínea:</span> <strong>{flight.airline}</strong>
           </p>
+          {flight.aircraftType && (
+            <p className="break-words">
+              <span className="font-medium">Tipo de Avión:</span> <strong>{flight.aircraftType}</strong>
+            </p>
+          )}
           <p className="break-words">
             <span className="font-medium">Destino:</span> <strong>{flight.destination}</strong>
           </p>

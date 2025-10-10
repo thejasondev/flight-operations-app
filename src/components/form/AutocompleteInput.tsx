@@ -13,6 +13,8 @@ interface AutocompleteInputProps {
   onSuggestionsVisibilityChange: (visible: boolean) => void;
   error?: string;
   required?: boolean;
+  disabled?: boolean;
+  icon?: React.ReactNode;
   className?: string;
 }
 
@@ -29,6 +31,8 @@ export default function AutocompleteInput({
   onSuggestionsVisibilityChange,
   error,
   required = false,
+  disabled = false,
+  icon,
   className = ''
 }: AutocompleteInputProps) {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,6 +62,13 @@ export default function AutocompleteInput({
         {label} {required && <span className="text-red-500">*</span>}
       </label>
       <div className="relative">
+        {icon && (
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <div className="text-gray-400 dark:text-gray-500">
+              {icon}
+            </div>
+          </div>
+        )}
         <input
           type="text"
           value={value}
@@ -65,7 +76,8 @@ export default function AutocompleteInput({
           onFocus={handleFocus}
           onBlur={handleBlur}
           placeholder={placeholder}
-          className={`w-full px-4 py-3 text-sm border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+          disabled={disabled}
+          className={`w-full ${icon ? 'pl-10' : 'pl-4'} pr-4 py-3 text-sm border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
             error 
               ? 'border-red-500 dark:border-red-400' 
               : 'border-gray-300 dark:border-gray-600'

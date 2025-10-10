@@ -4,6 +4,7 @@ export interface Flight {
   id: string;
   flightNumber: string;
   airline: string;
+  aircraftType?: string;
   destination: string;
   date?: string;
   eta: string;
@@ -121,6 +122,12 @@ export default function FlightCard({ flight, onClick, onDelete, onViewReport }: 
       <p className="text-gray-700 dark:text-gray-300 mb-2">
         <span className="font-medium">Destino:</span> {flight.destination}
       </p>
+
+      {flight.aircraftType && (
+        <p className="text-gray-700 dark:text-gray-300 mb-2">
+          <span className="font-medium">Avión:</span> {flight.aircraftType}
+        </p>
+      )}
 
       {flight.date && (
         <p className="text-gray-700 dark:text-gray-300 mb-2">
