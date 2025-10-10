@@ -5,12 +5,13 @@ import tailwind from "@astrojs/tailwind";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://flight-operations-panel.vercel.app",
+  site: "https://vraops.vercel.app",
   integrations: [
     react(), 
     tailwind()
   ],
   output: "static",
+  adapter: undefined,
   build: {
     inlineStylesheets: "never",
   },
