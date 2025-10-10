@@ -169,9 +169,16 @@ export default function Dashboard() {
           <div className="flex flex-col space-y-3 py-4 sm:hidden">
             {/* Top row: Logo and title */}
             <div className="flex items-center justify-center">
-              <h1 className="text-lg font-bold text-gray-900 dark:text-white text-center">
-                Panel de Operaciones Aéreas
-              </h1>
+              <div className="logo-container">
+                <img 
+                  src="/Panel OPS.webp" 
+                  alt="Panel Operaciones Aéreas Logo" 
+                  className="app-logo app-logo-md"
+                />
+                <h1 className="text-lg font-bold text-gray-900 dark:text-white text-center">
+                  Panel de Operaciones Aéreas
+                </h1>
+              </div>
             </div>
             
             {/* Bottom row: Theme toggle and add button */}
@@ -196,9 +203,16 @@ export default function Dashboard() {
           {/* Desktop Header */}
           <div className="hidden sm:flex justify-between items-center h-16">
             <div className="flex items-center">
-              <h1 className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white">
-                Panel de Operaciones Aéreas
-              </h1>
+              <div className="logo-container">
+                <img 
+                  src="/Panel OPS.webp" 
+                  alt="Panel Operaciones Aéreas Logo" 
+                  className="app-logo app-logo-lg"
+                />
+                <h1 className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white">
+                  Panel de Operaciones Aéreas
+                </h1>
+              </div>
             </div>
             <div className="flex items-center space-x-4">
               <ThemeToggle />

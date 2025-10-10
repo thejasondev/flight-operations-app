@@ -7,12 +7,17 @@
   "license": "MIT",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx,.astro",
+    "lint:fix": "eslint src --ext .js,.jsx,.ts,.tsx,.astro --fix",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,astro,css}\"",
-    "clean": "rimraf dist .astro node_modules"
+    "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,astro,css}\"",
+    "type-check": "astro check",
+    "clean": "rimraf dist .astro node_modules",
+    "build:production": "pnpm clean && pnpm type-check && pnpm lint && pnpm build",
+    "analyze": "astro build --analyze"
   },
   "dependencies": {
     "@astrojs/react": "^4.3.0",
@@ -26,6 +31,7 @@
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.4",
     "@astrojs/tailwind": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^8.34.0",
     "@typescript-eslint/parser": "^8.34.0",

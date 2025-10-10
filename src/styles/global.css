@@ -1,3 +1,7 @@
+/* Import styles - must be first */
+@import './images.css';
+@import './logo.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

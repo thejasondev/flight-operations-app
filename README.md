@@ -66,6 +66,7 @@ Aplicación web para coordinadores de operaciones aéreas que permite gestionar 
 ### Imprimir reportes
 
 1. Al completar un vuelo, se mostrará automáticamente el reporte.
+2. Haga clic en "Imprimir Reporte" para abrir el diálogo de Impresión del navegador.
 2. Haga clic en "Imprimir Reporte" para abrir el diálogo de impresión del navegador.
 
 ## Construcción para producción

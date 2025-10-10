@@ -3,13 +3,6 @@ import React, { useState, useEffect, useCallback } from "react";
 // Theme type definition
 type Theme = "light" | "dark";
 
-// Extend Window interface to include the global toggleTheme function
-declare global {
-  interface Window {
-    toggleTheme?: () => string;
-  }
-}
-
 // Icon components for better organization and performance
 const MoonIcon = ({ className }: { className?: string }) => (
   <svg 
