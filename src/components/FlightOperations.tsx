@@ -6,6 +6,8 @@ import {
   NotesSection, 
   ActionButtons 
 } from "./operations";
+import AutoSaveIndicator from "./AutoSaveIndicator";
+import TPTTimer from "./TPTTimer";
 import type { FlightOperationsProps } from "../types/operations";
 
 export default function FlightOperations({
@@ -17,6 +19,7 @@ export default function FlightOperations({
     operations,
     notes,
     setNotes,
+    saveStatus,
     isSingleTimeOperation,
     handleStartOperation,
     handleEndOperation,
@@ -30,12 +33,52 @@ export default function FlightOperations({
     onComplete(updatedFlight);
   };
 
+  // Extraer tiempos reales de las operaciones
+  const getActualArrivalTime = () => {
+    const arriboOperation = operations["Arribo Real (ON/IN)"];
+    return arriboOperation?.start || undefined;
+  };
+
+  const getActualDepartureTime = () => {
+    const empujeOperation = operations["Empuje"];
+    return empujeOperation?.start || undefined;
+  };
+
   return (
-    <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
-      <div className="mb-6">
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-          Operaciones
-        </h3>
+    <>
+      {/* Subtle auto-save confirmation - only show when saved */}
+      <AutoSaveIndicator 
+        isVisible={saveStatus === 'saved'} 
+        message="Guardado"
+        type="saved"
+      />
+      
+      {/* TPT Timer - Solo mostrar si hay ETA y ETD */}
+      {flight.eta && flight.etd && (
+        <div className="mb-6">
+          <TPTTimer 
+            flight={flight}
+            actualArrivalTime={getActualArrivalTime()}
+            actualDepartureTime={getActualDepartureTime()}
+          />
+        </div>
+      )}
+
+      <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+              Operaciones de Vuelo
+            </h3>
+            
+            {/* Subtle status indicator in header - only when actively saving */}
+            {saveStatus === 'saving' && (
+              <div className="flex items-center space-x-1 text-xs text-gray-400 dark:text-gray-500">
+                <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                <span>Guardando...</span>
+              </div>
+            )}
+          </div>
 
         {/* Vista móvil: Lista de tarjetas */}
         <OperationsList
@@ -70,5 +113,6 @@ export default function FlightOperations({
         onComplete={handleCompleteOperations}
       />
     </div>
+    </>
   );
 }

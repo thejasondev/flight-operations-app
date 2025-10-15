@@ -2,24 +2,56 @@ import { useState, useEffect } from 'react';
 import type { Flight } from '../components/FlightCard';
 import { OPERATIONS, SINGLE_TIME_OPERATIONS, type OperationsData } from '../types/operations';
 import { getCurrentTimeString } from '../utils/timeUtils';
+import { useReportPersistence, useAutoSaveReport } from './useReportPersistence';
 
 export const useFlightOperations = (flight: Flight) => {
   const [operations, setOperations] = useState<OperationsData>({});
-  const [notes, setNotes] = useState(flight.notes || "");
+  const [notes, setNotes] = useState("");
+  const [isInitialized, setIsInitialized] = useState(false);
+  const { getReportState, clearReportState } = useReportPersistence();
 
-  // Initialize operations from flight if they exist
+  // Auto-save report state with debouncing (reduced to 800ms)
+  const { saveStatus } = useAutoSaveReport(flight.id, operations, notes, 800);
+
+  // Initialize operations from saved state or flight data (only once per flight)
   useEffect(() => {
-    if (flight.operations) {
-      setOperations(flight.operations);
-    } else {
-      // Initialize with empty operations
-      const initialOps: OperationsData = {};
-      OPERATIONS.forEach((op) => {
-        initialOps[op] = { start: "", end: "" };
-      });
-      setOperations(initialOps);
-    }
-  }, [flight]);
+    // Prevent re-initialization if already initialized for this flight
+    if (isInitialized) return;
+
+    const initializeData = () => {
+      // First priority: Check for saved report state
+      const savedState = getReportState(flight.id);
+      
+      if (savedState) {
+        console.log('Loading saved state for flight:', flight.id);
+        setOperations(savedState.operations);
+        setNotes(savedState.notes);
+      } else if (flight.operations && Object.keys(flight.operations).length > 0) {
+        // Second priority: Use existing flight operations if available
+        console.log('Loading flight operations for flight:', flight.id);
+        setOperations(flight.operations);
+        setNotes(flight.notes || "");
+      } else {
+        // Last resort: Initialize with empty operations
+        console.log('Initializing empty operations for flight:', flight.id);
+        const initialOps: OperationsData = {};
+        OPERATIONS.forEach((op) => {
+          initialOps[op] = { start: "", end: "" };
+        });
+        setOperations(initialOps);
+        setNotes(flight.notes || "");
+      }
+      
+      setIsInitialized(true);
+    };
+
+    initializeData();
+  }, [flight.id, getReportState]); // Only depend on flight.id, not the entire flight object
+
+  // Reset initialization when flight changes
+  useEffect(() => {
+    setIsInitialized(false);
+  }, [flight.id]);
 
   // Check if operation is a single-time event
   const isSingleTimeOperation = (operation: string): boolean => {
@@ -94,10 +126,22 @@ export const useFlightOperations = (flight: Flight) => {
 
   // Create updated flight object for completion
   const createCompletedFlight = (): Flight => {
+    // Clear saved report state when completing the flight
+    clearReportState(flight.id);
+    
+    // Extract ATA and ATD from operations
+    const arriboOperation = operations["Arribo Real (ON/IN)"];
+    const empujeOperation = operations["Empuje"];
+    
+    const ata = arriboOperation?.start || undefined;
+    const atd = empujeOperation?.start || undefined;
+    
     return {
       ...flight,
       operations,
       notes,
+      ata,
+      atd,
       status: "completed",
     };
   };
@@ -106,6 +150,7 @@ export const useFlightOperations = (flight: Flight) => {
     operations,
     notes,
     setNotes,
+    saveStatus,
     isSingleTimeOperation,
     handleStartOperation,
     handleEndOperation,

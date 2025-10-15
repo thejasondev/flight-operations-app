@@ -1,4 +1,5 @@
 import React from "react";
+import TPTSummary from "./TPTSummary";
 
 export interface Flight {
   id: string;
@@ -145,6 +146,14 @@ export default function FlightCard({ flight, onClick, onDelete, onViewReport }: 
           <p className="text-md">{flight.etd}</p>
         </div>
       </div>
+
+      {/* TPT Summary */}
+      <TPTSummary 
+        flight={flight}
+        actualArrivalTime={flight.operations?.["Arribo Real (ON/IN)"]?.start}
+        actualDepartureTime={flight.operations?.["Empuje"]?.start}
+        compact={true}
+      />
     </div>
   );
 }

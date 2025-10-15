@@ -12,7 +12,7 @@ export default function OperationsTable({ flight }: OperationsTableProps) {
 
   return (
     <div className="hidden lg:block overflow-x-auto">
-      <table className="print-table min-w-full border-collapse border border-gray-300 dark:border-gray-600 print:border-black">
+      <table className="print-table print-operations-compact min-w-full border-collapse border border-gray-300 dark:border-gray-600 print:border-black">
         <thead className="bg-gray-50 dark:bg-gray-700 print:bg-gray-100">
           <tr>
             <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 print:text-black print:border-black uppercase tracking-wider">
@@ -40,7 +40,7 @@ export default function OperationsTable({ flight }: OperationsTableProps) {
                 index % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-700'
               } border-t border-gray-300 dark:border-gray-600 print:border-black print:bg-white print:text-black`}
             >
-              <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm font-medium text-gray-900 dark:text-white print:text-black print:border-black">
+              <td className="operation-name border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm font-medium text-gray-900 dark:text-white print:text-black print:border-black">
                 {operation}
                 {isSingleTimeOperation(operation) && (
                   <span className="block text-xs text-gray-500 dark:text-gray-400 print:text-gray-600 mt-1">
@@ -50,13 +50,13 @@ export default function OperationsTable({ flight }: OperationsTableProps) {
               </td>
               {isSingleTimeOperation(operation) ? (
                 <>
-                  <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 print:text-black print:border-black font-medium">
+                  <td className="operation-time border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 print:text-black print:border-black font-medium">
                     {formatTime(times.start)}
                   </td>
-                  <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 print:text-black print:border-black">
+                  <td className="operation-time border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 print:text-black print:border-black">
                     {formatTime(times.start)}
                   </td>
-                  <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 print:text-black print:border-black">
+                  <td className="operation-duration border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 print:text-black print:border-black">
                     {STATUS_LABELS.PUNCTUAL_EVENT}
                   </td>
                   <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm print:text-black print:border-black">
@@ -73,13 +73,13 @@ export default function OperationsTable({ flight }: OperationsTableProps) {
                 </>
               ) : (
                 <>
-                  <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 print:text-black print:border-black font-medium">
+                  <td className="operation-time border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 print:text-black print:border-black font-medium">
                     {formatTime(times.start)}
                   </td>
-                  <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 print:text-black print:border-black font-medium">
+                  <td className="operation-time border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 print:text-black print:border-black font-medium">
                     {formatTime(times.end)}
                   </td>
-                  <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 print:text-black print:border-black font-medium">
+                  <td className="operation-duration border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 print:text-black print:border-black font-medium">
                     {calculateDuration(times.start, times.end)}
                   </td>
                   <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm print:text-black print:border-black">

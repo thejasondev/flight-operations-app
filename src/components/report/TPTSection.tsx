@@ -1,0 +1,59 @@
+import React from 'react';
+import type { Flight } from '../FlightCard';
+import { calculateTPT, calculateTPTStatus, formatDuration } from '../../utils/tptUtils';
+
+interface TPTSectionProps {
+  flight: Flight;
+}
+
+export default function TPTSection({ flight }: TPTSectionProps) {
+  // Solo mostrar si hay ETA y ETD
+  if (!flight.eta || !flight.etd) {
+    return null;
+  }
+
+  const tptData = calculateTPT(flight.eta, flight.etd);
+  const actualArrivalTime = flight.operations?.["Arribo Real (ON/IN)"]?.start;
+  const actualDepartureTime = flight.operations?.["Empuje"]?.start;
+  const tptStatus = calculateTPTStatus(tptData, actualArrivalTime, actualDepartureTime);
+
+  // Calcular duración real si hay tiempos reales
+  let actualDuration = 'N/A';
+  if (actualArrivalTime && actualDepartureTime) {
+    const arrivalMinutes = parseInt(actualArrivalTime.split(':')[0]) * 60 + parseInt(actualArrivalTime.split(':')[1]);
+    const departureMinutes = parseInt(actualDepartureTime.split(':')[0]) * 60 + parseInt(actualDepartureTime.split(':')[1]);
+    let duration = departureMinutes - arrivalMinutes;
+    if (duration < 0) duration += 24 * 60; // Handle midnight crossing
+    actualDuration = formatDuration(duration);
+  }
+
+  return (
+    <div className="print-section print-tpt-section bg-blue-50 dark:bg-blue-900/20 p-3 sm:p-4 rounded-lg border border-blue-200 dark:border-blue-700 mb-4">
+      <h3 className="text-base sm:text-lg font-semibold mb-3 text-blue-900 dark:text-blue-100 print:text-black">
+        TPT - Tiempo en Tierra
+      </h3>
+      <div className="print-tpt-grid grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div className="print-tpt-item text-center p-2 bg-white dark:bg-gray-800 rounded border border-blue-100 dark:border-blue-800">
+          <span className="block text-xs text-gray-600 dark:text-gray-400 mb-1">TPT Programado</span>
+          <strong className="text-sm font-bold text-blue-700 dark:text-blue-300">{tptData.tptFormatted}</strong>
+        </div>
+        <div className="print-tpt-item text-center p-2 bg-white dark:bg-gray-800 rounded border border-blue-100 dark:border-blue-800">
+          <span className="block text-xs text-gray-600 dark:text-gray-400 mb-1">TPT Real</span>
+          <strong className="text-sm font-bold text-blue-700 dark:text-blue-300">{actualDuration}</strong>
+        </div>
+        <div className="print-tpt-item text-center p-2 bg-white dark:bg-gray-800 rounded border border-blue-100 dark:border-blue-800">
+          <span className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Estado</span>
+          <strong className="text-sm font-bold text-blue-700 dark:text-blue-300">{tptStatus.delayFormatted}</strong>
+        </div>
+        <div className="print-tpt-item text-center p-2 bg-white dark:bg-gray-800 rounded border border-blue-100 dark:border-blue-800">
+          <span className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Diferencia</span>
+          <strong className="text-sm font-bold text-blue-700 dark:text-blue-300">
+            {tptStatus.delayMinutes > 0 ? `+${formatDuration(tptStatus.delayMinutes)}` : 
+             tptStatus.delayMinutes < 0 ? `-${formatDuration(Math.abs(tptStatus.delayMinutes))}` : 
+             '0m'}
+          </strong>
+        </div>
+      </div>
+    </div>
+  );
+}

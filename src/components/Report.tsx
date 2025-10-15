@@ -4,6 +4,7 @@ import { useReport } from "../hooks/useReport";
 import ReportHeader from "./report/ReportHeader";
 import ReportTitle from "./report/ReportTitle";
 import FlightInfoSection from "./report/FlightInfoSection";
+import TPTSection from "./report/TPTSection";
 import OperationsSection from "./report/OperationsSection";
 import NotesSection from "./report/NotesSection";
 import ReportFooter from "./report/ReportFooter";
@@ -50,6 +51,9 @@ export default function Report({ flight, onClose }: ReportProps) {
 
               {/* Flight Information Section */}
               <FlightInfoSection flight={flight} />
+
+              {/* TPT Section */}
+              <TPTSection flight={flight} />
 
               {/* Operations Section */}
               <OperationsSection flight={flight} />
