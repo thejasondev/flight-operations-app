@@ -1,5 +1,6 @@
 import React from "react";
 import TPTSummary from "./TPTSummary";
+import "../styles/liquidGlass.css";
 
 export interface Flight {
   id: string;
@@ -25,16 +26,16 @@ interface FlightCardProps {
 }
 
 export default function FlightCard({ flight, onClick, onDelete, onViewReport }: FlightCardProps) {
-  // Determine card styling based on status
+  // Determine card styling based on status with liquid glass effect
   const getCardClasses = () => {
-    const baseClasses = "bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-4 cursor-pointer hover:shadow-lg transition-all border-l-4 hover-card-effect";
+    const baseClasses = "liquid-glass-card p-4 mb-4 cursor-pointer transition-all border-l-4 relative overflow-hidden";
     
     if (flight.status === "pending") {
-      return `${baseClasses} border-yellow-500`;
+      return `${baseClasses} border-yellow-400 liquid-glass-status-pending`;
     } else if (flight.status === "in-progress") {
-      return `${baseClasses} border-blue-500`;
+      return `${baseClasses} border-blue-400 liquid-glass-status-progress`;
     } else {
-      return `${baseClasses} border-green-500`;
+      return `${baseClasses} border-green-400 liquid-glass-status-completed`;
     }
   };
 

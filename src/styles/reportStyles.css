@@ -1,0 +1,52 @@
+/* Report scroll container styles */
+.report-scroll-container {
+  -webkit-overflow-scrolling: touch; /* iOS smooth scrolling */
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(156, 163, 175, 0.5) transparent; /* Firefox */
+}
+
+/* Webkit scrollbar styling */
+.report-scroll-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.report-scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.report-scroll-container::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.5);
+  border-radius: 4px;
+}
+
+.report-scroll-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(156, 163, 175, 0.7);
+}
+
+/* Print preview specific styles */
+.print-preview-container {
+  background: #f5f5f5;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.print-preview-page {
+  width: 21cm;
+  min-height: 29.7cm;
+  background: white;
+  margin: 0 auto;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  padding: 0.8cm;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+@media screen {
+  .print-preview-page .print-content {
+    position: static !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+}

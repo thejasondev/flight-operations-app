@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import type { Flight } from "./FlightCard";
 import { useReport } from "../hooks/useReport";
 import ReportHeader from "./report/ReportHeader";
@@ -8,6 +8,8 @@ import TPTSection from "./report/TPTSection";
 import OperationsSection from "./report/OperationsSection";
 import NotesSection from "./report/NotesSection";
 import ReportFooter from "./report/ReportFooter";
+import PrintPreview from "./PrintPreview";
+import "../styles/reportStyles.css";
 
 interface ReportProps {
   flight: Flight;
@@ -16,6 +18,43 @@ interface ReportProps {
 
 export default function Report({ flight, onClose }: ReportProps) {
   const { modalRef, scrollContainerRef, handlePrint, handleKeyDown, handleWheel } = useReport({ onClose });
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
+
+  const handleTogglePreview = () => {
+    setIsPreviewMode(!isPreviewMode);
+  };
+
+  const reportContent = (
+    <>
+      {/* Report Title */}
+      <ReportTitle />
+
+      {/* Flight Information Section */}
+      <FlightInfoSection flight={flight} />
+
+      {/* TPT Section */}
+      <TPTSection flight={flight} />
+
+      {/* Operations Section */}
+      <OperationsSection flight={flight} />
+
+      {/* Notes Section */}
+      <NotesSection flight={flight} />
+
+      {/* Report Footer */}
+      <ReportFooter flight={flight} />
+    </>
+  );
+
+  if (isPreviewMode) {
+    return (
+      <PrintPreview isPreviewMode={isPreviewMode} onTogglePreview={handleTogglePreview}>
+        <div className="print-content">
+          {reportContent}
+        </div>
+      </PrintPreview>
+    );
+  }
 
   return (
     <div 
@@ -31,12 +70,7 @@ export default function Report({ flight, onClose }: ReportProps) {
     >
       <div 
         ref={scrollContainerRef}
-        className="h-full w-full overflow-y-auto overflow-x-hidden print:overflow-visible print:h-auto"
-        style={{
-          WebkitOverflowScrolling: 'touch', // iOS smooth scrolling
-          scrollbarWidth: 'thin', // Firefox
-          scrollbarColor: 'rgba(156, 163, 175, 0.5) transparent' // Firefox
-        }}
+        className="h-full w-full overflow-y-auto overflow-x-hidden print:overflow-visible print:h-auto report-scroll-container"
       >
         <div className="min-h-full flex items-start justify-center p-2 sm:p-4 print:p-0 print:min-h-0">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-3 sm:p-6 lg:p-8 max-w-4xl w-full my-4 print:my-0 print:shadow-none print:p-0 print:max-w-none print:rounded-none">
@@ -46,23 +80,7 @@ export default function Report({ flight, onClose }: ReportProps) {
 
             {/* Printable Report Content */}
             <div className="print-content print:text-black print:bg-white">
-              {/* Report Title */}
-              <ReportTitle />
-
-              {/* Flight Information Section */}
-              <FlightInfoSection flight={flight} />
-
-              {/* TPT Section */}
-              <TPTSection flight={flight} />
-
-              {/* Operations Section */}
-              <OperationsSection flight={flight} />
-
-              {/* Notes Section */}
-              <NotesSection flight={flight} />
-
-              {/* Report Footer */}
-              <ReportFooter flight={flight} />
+              {reportContent}
             </div>
           </div>
         </div>

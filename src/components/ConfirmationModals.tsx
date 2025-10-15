@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Flight } from './FlightCard';
+import "../styles/liquidGlass.css";
 
 interface DeleteModalProps {
   isOpen: boolean;
@@ -21,7 +22,7 @@ export function DeleteConfirmationModal({ isOpen, flight, onConfirm, onCancel }:
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 max-w-md w-full">
+      <div className="liquid-glass-modal p-6 max-w-md w-full">
         <div className="flex items-center mb-4">
           <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900">
             <svg className="h-6 w-6 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">

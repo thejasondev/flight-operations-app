@@ -11,7 +11,7 @@ export default function OperationsCards({ flight }: OperationsCardsProps) {
   if (!flight.operations) return null;
 
   return (
-    <div className="block lg:hidden space-y-3">
+    <div className="block lg:hidden print:hidden space-y-3">
       {Object.entries(flight.operations).map(([operation, times]) => (
         <div
           key={operation}

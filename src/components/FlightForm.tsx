@@ -4,6 +4,7 @@ import { useFlightForm } from '../hooks/useFlightForm';
 import FlightBasicInfo from './form/FlightBasicInfo';
 import RouteConfiguration from './form/RouteConfiguration';
 import FlightTiming from './form/FlightTiming';
+import "../styles/liquidGlass.css";
 
 interface FlightFormProps {
   onSubmit: (flight: Omit<Flight, 'id' | 'status'>) => void;
@@ -60,7 +61,7 @@ export default function FlightForm({ onSubmit, onCancel, isSubmitting = false }:
   } = useFlightForm({ onSubmit, commonAirlines, commonDestinations });
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+    <div className="liquid-glass-modal p-6">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
           <svg className="w-6 h-6 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">

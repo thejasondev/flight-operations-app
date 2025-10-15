@@ -1,6 +1,7 @@
 import React from 'react';
 import { calculateTPT, calculateTPTStatus, getDelayStatusColor } from '../utils/tptUtils';
 import type { Flight } from './FlightCard';
+import "../styles/liquidGlass.css";
 
 interface TPTSummaryProps {
   flight: Flight;
@@ -77,7 +78,7 @@ export default function TPTSummary({
   }
 
   return (
-    <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+    <div className="mt-3 p-3 liquid-glass rounded-lg">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center space-x-2">
           {getStatusIcon()}
@@ -94,13 +95,13 @@ export default function TPTSummary({
       {/* Mini progress bar */}
       <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2 mb-2">
         <div 
-          className={`h-full rounded-full transition-all duration-500 ${
+          className={`tpt-progress-bar h-full rounded-full transition-all duration-500 ${
             tptStatus.phase === 'waiting' ? 'bg-gray-400' :
             tptStatus.phase === 'active' ? 'bg-blue-500' :
             tptStatus.phase === 'overdue' ? 'bg-red-500' :
             'bg-green-500'
           }`}
-          style={{ width: `${Math.min(100, Math.max(0, tptStatus.progressPercentage))}%` }}
+          data-progress={Math.min(100, Math.max(0, tptStatus.progressPercentage))}
         />
       </div>
       

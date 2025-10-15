@@ -7,6 +7,7 @@ import ThemeToggle from "./ThemeToggle";
 import FlightForm from "./FlightForm";
 import { DeleteConfirmationModal, SwitchFlightModal } from "./ConfirmationModals";
 import { useFlightData } from "../hooks/useFlightData";
+import "../styles/liquidGlass.css";
 
 export default function Dashboard() {
   // Use custom hook for flight data management
@@ -163,7 +164,7 @@ export default function Dashboard() {
   return (
     <div className="bg-gray-50 dark:bg-gray-900 transition-colors">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 relative">
+      <header className="liquid-glass-header shadow-sm border-b border-gray-200 dark:border-gray-700 relative">
         <div className="max-w-7xl mx-auto px-0 sm:px-6 lg:px-8">
           {/* Mobile Header */}
           <div className="sm:hidden mobile-header-container">
@@ -196,19 +197,15 @@ export default function Dashboard() {
                 {/* Separator */}
                 <div className="w-px h-10 bg-gradient-to-b from-transparent via-gray-300 to-transparent dark:via-gray-500"></div>
                 
-                {/* Add Flight Button - Enhanced */}
+                {/* Add Flight Button - Enhanced with Liquid Glass */}
                 <button
                   onClick={() => setShowFlightForm(true)}
-                  className="mobile-add-flight-btn group relative inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all duration-200 font-semibold text-sm min-w-[140px]"
+                  className="liquid-glass-button group relative inline-flex items-center justify-center px-6 py-3 text-blue-700 dark:text-blue-300 font-semibold text-sm min-w-[140px]"
                 >
-                  <div className="absolute inset-0 bg-white/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
                   <svg className="w-5 h-5 mr-2 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                   </svg>
                   <span className="relative z-10">Nuevo Vuelo</span>
-                  
-                  {/* Subtle glow effect */}
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-400 to-blue-500 opacity-0 group-hover:opacity-20 blur-sm transition-opacity duration-200"></div>
                 </button>
               </div>
               

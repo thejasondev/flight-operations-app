@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import "../styles/liquidGlass.css";
 
 interface AutoSaveIndicatorProps {
   isVisible: boolean;
@@ -71,13 +72,16 @@ export default function AutoSaveIndicator({
     <div className={`
       fixed bottom-4 right-4 z-40 
       flex items-center space-x-2 
-      px-3 py-2 rounded-lg border shadow-md backdrop-blur-sm
+      px-4 py-3 liquid-glass-notification
       transform transition-all duration-500 ease-in-out
       ${show ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-2 opacity-0 scale-95'}
-      ${getStyles()}
+      ${type === 'saving' ? 'text-blue-700 dark:text-blue-300' : 
+        type === 'saved' ? 'text-green-700 dark:text-green-300' : 
+        type === 'error' ? 'text-red-700 dark:text-red-300' : 
+        'text-gray-700 dark:text-gray-300'}
     `}>
       {getIcon()}
-      <span className="text-xs font-medium">{message}</span>
+      <span className="text-sm font-medium">{message}</span>
     </div>
   );
 }

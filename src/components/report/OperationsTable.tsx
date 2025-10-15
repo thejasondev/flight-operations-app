@@ -11,8 +11,8 @@ export default function OperationsTable({ flight }: OperationsTableProps) {
   if (!flight.operations) return null;
 
   return (
-    <div className="hidden lg:block overflow-x-auto">
-      <table className="print-table print-operations-compact min-w-full border-collapse border border-gray-300 dark:border-gray-600 print:border-black">
+    <div className="hidden lg:block print:block overflow-x-auto print:overflow-visible">
+      <table className="print-table min-w-full border-collapse border border-gray-300 dark:border-gray-600 print:border-black">
         <thead className="bg-gray-50 dark:bg-gray-700 print:bg-gray-100">
           <tr>
             <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 print:text-black print:border-black uppercase tracking-wider">
