@@ -12,19 +12,26 @@ export interface TPTData {
   tptFormatted: string;  // TPT formateado (ej: "2h 30m")
 }
 
+export interface DelayInfo {
+  minutes: number;
+  status: 'on-time' | 'early' | 'delayed';
+  formatted: string;
+  criticality?: {
+    level: 'low' | 'medium' | 'high' | 'critical';
+    description: string;
+  };
+}
+
 export interface FlightDelayAnalysis {
-  arrivalDelay: {
-    minutes: number;
-    status: 'on-time' | 'early' | 'delayed';
-    formatted: string;
-  };
-  departureDelay: {
-    minutes: number;
-    status: 'on-time' | 'early' | 'delayed';
-    formatted: string;
-  };
+  arrivalDelay: DelayInfo;
+  departureDelay: DelayInfo;
   overallStatus: 'on-time' | 'early' | 'delayed';
   overallFormatted: string;
+  summary: {
+    totalDelayMinutes: number;
+    impactLevel: 'minimal' | 'moderate' | 'significant' | 'severe';
+    recommendation: string;
+  };
 }
 
 export interface TPTStatus {
@@ -76,13 +83,19 @@ export function formatDuration(minutes: number): string {
 }
 
 /**
- * Analiza el retraso de un tiempo específico (llegada o salida)
+ * Analiza el desfasaje exacto entre tiempo estimado y real
+ * Refleja la diferencia real sin tolerancias que enmascaren la información
  */
 export function analyzeTimeDelay(
   estimatedTime: string,
   actualTime: string,
   type: 'arrival' | 'departure'
 ): { minutes: number; status: 'on-time' | 'early' | 'delayed'; formatted: string } {
+  // Validación de entrada
+  if (!estimatedTime || !actualTime) {
+    return { minutes: 0, status: 'on-time', formatted: 'Datos insuficientes' };
+  }
+
   const estimatedMinutes = timeToMinutes(estimatedTime);
   const actualMinutes = timeToMinutes(actualTime);
   
@@ -98,24 +111,56 @@ export function analyzeTimeDelay(
   let status: 'on-time' | 'early' | 'delayed';
   let formatted: string;
   
-  const tolerance = type === 'arrival' ? 10 : 5; // 10 min para llegada, 5 min para salida
-  
-  if (delayMinutes <= -tolerance) {
+  // Análisis exacto basado en desfasaje real
+  if (delayMinutes === 0) {
+    // Exactamente puntual
+    status = 'on-time';
+    formatted = 'Puntual';
+  } else if (delayMinutes < 0) {
+    // Adelantado (siempre positivo para operaciones)
     status = 'early';
     formatted = `Adelantado ${formatDuration(Math.abs(delayMinutes))}`;
-  } else if (delayMinutes >= tolerance) {
+  } else {
+    // Retrasado (problema operacional)
     status = 'delayed';
     formatted = `Retrasado ${formatDuration(delayMinutes)}`;
-  } else {
-    status = 'on-time';
-    formatted = 'A tiempo';
   }
   
   return { minutes: delayMinutes, status, formatted };
 }
 
 /**
- * Realiza un análisis completo de retrasos de vuelo
+ * Obtiene el nivel de criticidad basado en el impacto operacional
+ * Solo los retrasos se consideran problemáticos
+ */
+export function getDelayCriticality(delayMinutes: number, type: 'arrival' | 'departure'): {
+  level: 'low' | 'medium' | 'high' | 'critical';
+  description: string;
+} {
+  // Si es adelantado o puntual, siempre es operación normal
+  if (delayMinutes <= 0) {
+    return { 
+      level: 'low', 
+      description: delayMinutes === 0 ? 'Operación puntual' : 'Operación adelantada - Excelente' 
+    };
+  }
+  
+  // Solo evaluar criticidad en caso de retrasos (delayMinutes > 0)
+  if (type === 'arrival') {
+    if (delayMinutes <= 15) return { level: 'low', description: 'Retraso menor - Monitorear' };
+    if (delayMinutes <= 30) return { level: 'medium', description: 'Retraso moderado - Atención requerida' };
+    if (delayMinutes <= 60) return { level: 'high', description: 'Retraso significativo - Acción inmediata' };
+    return { level: 'critical', description: 'Retraso crítico - Investigación urgente' };
+  } else {
+    if (delayMinutes <= 5) return { level: 'low', description: 'Retraso menor - Monitorear' };
+    if (delayMinutes <= 15) return { level: 'medium', description: 'Retraso moderado - Atención requerida' };
+    if (delayMinutes <= 30) return { level: 'high', description: 'Retraso significativo - Acción inmediata' };
+    return { level: 'critical', description: 'Retraso crítico - Investigación urgente' };
+  }
+}
+
+/**
+ * Realiza un análisis completo de retrasos de vuelo con métricas profesionales
  */
 export function analyzeFlightDelays(
   eta: string,
@@ -126,41 +171,91 @@ export function analyzeFlightDelays(
   // Necesitamos al menos ATA para hacer análisis
   if (!ata) return undefined;
   
-  const arrivalDelay = analyzeTimeDelay(eta, ata, 'arrival');
+  // Análisis de llegada con criticidad
+  const arrivalAnalysis = analyzeTimeDelay(eta, ata, 'arrival');
+  const arrivalCriticality = getDelayCriticality(arrivalAnalysis.minutes, 'arrival');
   
-  let departureDelay: {
-    minutes: number;
-    status: 'on-time' | 'early' | 'delayed';
-    formatted: string;
-  } = {
+  const arrivalDelay: DelayInfo = {
+    ...arrivalAnalysis,
+    criticality: arrivalCriticality
+  };
+  
+  // Análisis de salida con criticidad
+  let departureDelay: DelayInfo = {
     minutes: 0,
     status: 'on-time',
     formatted: 'Pendiente'
   };
   
   if (atd) {
-    departureDelay = analyzeTimeDelay(etd, atd, 'departure');
+    const departureAnalysis = analyzeTimeDelay(etd, atd, 'departure');
+    const departureCriticality = getDelayCriticality(departureAnalysis.minutes, 'departure');
+    
+    departureDelay = {
+      ...departureAnalysis,
+      criticality: departureCriticality
+    };
   }
   
-  // Determinar estado general (prioridad a la salida si está disponible)
+  // Determinar estado general con lógica mejorada
   let overallStatus: 'on-time' | 'early' | 'delayed';
   let overallFormatted: string;
   
   if (atd) {
-    // Si tenemos ATD, el estado general se basa en la salida
+    // Si tenemos ATD, el estado general se basa en la salida (más crítico)
     overallStatus = departureDelay.status;
     overallFormatted = departureDelay.formatted;
   } else {
     // Si solo tenemos ATA, el estado se basa en la llegada
     overallStatus = arrivalDelay.status;
-    overallFormatted = arrivalDelay.formatted;
+    
+    // Proyección inteligente para salida basada en llegada
+    const projectedDepartureDelay = arrivalDelay.minutes;
+    if (projectedDepartureDelay > 15) {
+      overallFormatted = `Proyección: Salida retrasada ~${formatDuration(projectedDepartureDelay)}`;
+    } else if (projectedDepartureDelay < -15) {
+      overallFormatted = `Proyección: Salida adelantada ~${formatDuration(Math.abs(projectedDepartureDelay))}`;
+    } else {
+      overallFormatted = arrivalDelay.formatted;
+    }
+  }
+  
+  // Calcular resumen e impacto general - Solo retrasos son problemáticos
+  const arrivalDelayActual = Math.max(0, arrivalDelay.minutes); // Solo retrasos positivos
+  const departureDelayActual = atd ? Math.max(0, departureDelay.minutes) : 0;
+  const totalDelayMinutes = Math.max(arrivalDelayActual, departureDelayActual);
+  
+  let impactLevel: 'minimal' | 'moderate' | 'significant' | 'severe';
+  let recommendation: string;
+  
+  // Evaluar impacto solo basado en retrasos reales
+  if (totalDelayMinutes === 0) {
+    impactLevel = 'minimal';
+    recommendation = 'Operación puntual o adelantada - Excelente rendimiento';
+  } else if (totalDelayMinutes <= 15) {
+    impactLevel = 'minimal';
+    recommendation = 'Retraso menor - Continuar monitoreo normal';
+  } else if (totalDelayMinutes <= 30) {
+    impactLevel = 'moderate';
+    recommendation = 'Retraso moderado - Monitorear operaciones subsecuentes';
+  } else if (totalDelayMinutes <= 60) {
+    impactLevel = 'significant';
+    recommendation = 'Retraso significativo - Revisar causas y ajustar planificación';
+  } else {
+    impactLevel = 'severe';
+    recommendation = 'Retraso crítico - Investigación urgente y medidas correctivas';
   }
   
   return {
     arrivalDelay,
     departureDelay,
     overallStatus,
-    overallFormatted
+    overallFormatted,
+    summary: {
+      totalDelayMinutes,
+      impactLevel,
+      recommendation
+    }
   };
 }
 

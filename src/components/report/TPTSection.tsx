@@ -65,6 +65,27 @@ export default function TPTSection({ flight }: TPTSectionProps) {
           <h4 className="text-sm font-semibold mb-2 text-blue-800 dark:text-blue-200 print:text-black">
             Análisis Detallado de Puntualidad
           </h4>
+          
+          {/* Summary Section */}
+          <div className="mb-3 p-2 bg-blue-50 dark:bg-blue-900/10 rounded border border-blue-100 dark:border-blue-800">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-xs font-medium text-blue-700 dark:text-blue-300">Resumen Operacional</span>
+              <span className={`px-2 py-1 rounded text-xs font-medium ${
+                tptStatus.delayAnalysis.summary.impactLevel === 'minimal' ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300' :
+                tptStatus.delayAnalysis.summary.impactLevel === 'moderate' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300' :
+                tptStatus.delayAnalysis.summary.impactLevel === 'significant' ? 'bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300' :
+                'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300'
+              }`}>
+                {tptStatus.delayAnalysis.summary.impactLevel === 'minimal' ? 'Mínimo' :
+                 tptStatus.delayAnalysis.summary.impactLevel === 'moderate' ? 'Moderado' :
+                 tptStatus.delayAnalysis.summary.impactLevel === 'significant' ? 'Significativo' : 'Severo'}
+              </span>
+            </div>
+            <div className="text-xs text-blue-600 dark:text-blue-400">
+              {tptStatus.delayAnalysis.summary.recommendation}
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {/* Arrival Analysis */}
             <div className="p-2 bg-white dark:bg-gray-800 rounded border border-blue-100 dark:border-blue-800">
@@ -79,9 +100,20 @@ export default function TPTSection({ flight }: TPTSectionProps) {
                 </div>
               </div>
               <div className="text-xs text-gray-700 dark:text-gray-300">
-                <div>ETA: {flight.eta}</div>
-                <div>ATA: {actualArrivalTime || 'Pendiente'}</div>
-                <div className="font-medium mt-1">{tptStatus.delayAnalysis.arrivalDelay.formatted}</div>
+                <div className="flex justify-between">
+                  <span>ETA:</span>
+                  <span className="font-mono">{flight.eta}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>ATA:</span>
+                  <span className="font-mono">{actualArrivalTime || 'Pendiente'}</span>
+                </div>
+                <div className="font-medium mt-1 text-center">{tptStatus.delayAnalysis.arrivalDelay.formatted}</div>
+                {tptStatus.delayAnalysis.arrivalDelay.criticality && (
+                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-1 text-center">
+                    {tptStatus.delayAnalysis.arrivalDelay.criticality.description}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -98,9 +130,20 @@ export default function TPTSection({ flight }: TPTSectionProps) {
                 </div>
               </div>
               <div className="text-xs text-gray-700 dark:text-gray-300">
-                <div>ETD: {flight.etd}</div>
-                <div>ATD: {actualDepartureTime || 'Pendiente'}</div>
-                <div className="font-medium mt-1">{tptStatus.delayAnalysis.departureDelay.formatted}</div>
+                <div className="flex justify-between">
+                  <span>ETD:</span>
+                  <span className="font-mono">{flight.etd}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>ATD:</span>
+                  <span className="font-mono">{actualDepartureTime || 'Pendiente'}</span>
+                </div>
+                <div className="font-medium mt-1 text-center">{tptStatus.delayAnalysis.departureDelay.formatted}</div>
+                {tptStatus.delayAnalysis.departureDelay.criticality && (
+                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-1 text-center">
+                    {tptStatus.delayAnalysis.departureDelay.criticality.description}
+                  </div>
+                )}
               </div>
             </div>
           </div>
