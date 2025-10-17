@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { calculateTPT, calculateTPTStatus, getDelayStatusColor, getTPTProgressColor, formatDuration } from '../utils/tptUtils';
 import type { Flight } from './FlightCard';
+import { StatusIcon } from './icons/StatusIcons';
 
 interface TPTTimerProps {
   flight: Flight;
@@ -109,7 +110,7 @@ export default function TPTTimer({
           {getPhaseIcon()}
           <div>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              TPT - Tiempo en Tierra
+              TPT
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">
               {getPhaseText()}
@@ -176,8 +177,56 @@ export default function TPTTimer({
           {getPhaseDescription()}
         </p>
         
-        {/* Real times display */}
-        {(actualArrivalTime || actualDepartureTime) && (
+        {/* Detailed Delay Analysis */}
+        {tptStatus.delayAnalysis && (
+          <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
+            <h4 className="text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300 text-center">
+              Análisis de Puntualidad
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Arrival Analysis */}
+              <div className="p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Llegada</span>
+                  <div className={`px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${getDelayStatusColor(tptStatus.delayAnalysis.arrivalDelay.status).bg} ${getDelayStatusColor(tptStatus.delayAnalysis.arrivalDelay.status).text}`}>
+                    <StatusIcon 
+                      status={tptStatus.delayAnalysis.arrivalDelay.status} 
+                      size="sm" 
+                      className="flex-shrink-0"
+                    />
+                  </div>
+                </div>
+                <div className="text-xs text-gray-700 dark:text-gray-300">
+                  <div>ETA: {flight.eta}</div>
+                  <div>ATA: {actualArrivalTime || 'Pendiente'}</div>
+                  <div className="font-medium mt-1">{tptStatus.delayAnalysis.arrivalDelay.formatted}</div>
+                </div>
+              </div>
+
+              {/* Departure Analysis */}
+              <div className="p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Salida</span>
+                  <div className={`px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${getDelayStatusColor(tptStatus.delayAnalysis.departureDelay.status).bg} ${getDelayStatusColor(tptStatus.delayAnalysis.departureDelay.status).text}`}>
+                    <StatusIcon 
+                      status={actualDepartureTime ? tptStatus.delayAnalysis.departureDelay.status : 'pending'} 
+                      size="sm" 
+                      className="flex-shrink-0"
+                    />
+                  </div>
+                </div>
+                <div className="text-xs text-gray-700 dark:text-gray-300">
+                  <div>ETD: {flight.etd}</div>
+                  <div>ATD: {actualDepartureTime || 'Pendiente'}</div>
+                  <div className="font-medium mt-1">{tptStatus.delayAnalysis.departureDelay.formatted}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Real times display (fallback if no analysis) */}
+        {!tptStatus.delayAnalysis && (actualArrivalTime || actualDepartureTime) && (
           <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
             <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400">
               {actualArrivalTime && (

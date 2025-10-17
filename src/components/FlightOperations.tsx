@@ -36,7 +36,9 @@ export default function FlightOperations({
   // Extraer tiempos reales de las operaciones
   const getActualArrivalTime = () => {
     const arriboOperation = operations["Arribo Real (ON/IN)"];
-    return arriboOperation?.start || undefined;
+    // TPT debe comenzar cuando el arribo real FINALIZA (end), no cuando inicia (start)
+    // Esto representa cuando el avión está completamente en tierra y listo para operaciones
+    return arriboOperation?.end || undefined;
   };
 
   const getActualDepartureTime = () => {

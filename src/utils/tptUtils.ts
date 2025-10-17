@@ -12,6 +12,21 @@ export interface TPTData {
   tptFormatted: string;  // TPT formateado (ej: "2h 30m")
 }
 
+export interface FlightDelayAnalysis {
+  arrivalDelay: {
+    minutes: number;
+    status: 'on-time' | 'early' | 'delayed';
+    formatted: string;
+  };
+  departureDelay: {
+    minutes: number;
+    status: 'on-time' | 'early' | 'delayed';
+    formatted: string;
+  };
+  overallStatus: 'on-time' | 'early' | 'delayed';
+  overallFormatted: string;
+}
+
 export interface TPTStatus {
   phase: 'waiting' | 'active' | 'completed' | 'overdue';
   remainingMinutes: number;
@@ -20,6 +35,8 @@ export interface TPTStatus {
   delayMinutes: number;
   delayStatus: 'on-time' | 'early' | 'delayed';
   delayFormatted: string;
+  // Nueva propiedad para análisis detallado
+  delayAnalysis?: FlightDelayAnalysis;
 }
 
 /**
@@ -59,6 +76,95 @@ export function formatDuration(minutes: number): string {
 }
 
 /**
+ * Analiza el retraso de un tiempo específico (llegada o salida)
+ */
+export function analyzeTimeDelay(
+  estimatedTime: string,
+  actualTime: string,
+  type: 'arrival' | 'departure'
+): { minutes: number; status: 'on-time' | 'early' | 'delayed'; formatted: string } {
+  const estimatedMinutes = timeToMinutes(estimatedTime);
+  const actualMinutes = timeToMinutes(actualTime);
+  
+  let delayMinutes = actualMinutes - estimatedMinutes;
+  
+  // Manejar cruce de medianoche
+  if (delayMinutes < -12 * 60) {
+    delayMinutes += 24 * 60;
+  } else if (delayMinutes > 12 * 60) {
+    delayMinutes -= 24 * 60;
+  }
+  
+  let status: 'on-time' | 'early' | 'delayed';
+  let formatted: string;
+  
+  const tolerance = type === 'arrival' ? 10 : 5; // 10 min para llegada, 5 min para salida
+  
+  if (delayMinutes <= -tolerance) {
+    status = 'early';
+    formatted = `Adelantado ${formatDuration(Math.abs(delayMinutes))}`;
+  } else if (delayMinutes >= tolerance) {
+    status = 'delayed';
+    formatted = `Retrasado ${formatDuration(delayMinutes)}`;
+  } else {
+    status = 'on-time';
+    formatted = 'A tiempo';
+  }
+  
+  return { minutes: delayMinutes, status, formatted };
+}
+
+/**
+ * Realiza un análisis completo de retrasos de vuelo
+ */
+export function analyzeFlightDelays(
+  eta: string,
+  etd: string,
+  ata?: string,
+  atd?: string
+): FlightDelayAnalysis | undefined {
+  // Necesitamos al menos ATA para hacer análisis
+  if (!ata) return undefined;
+  
+  const arrivalDelay = analyzeTimeDelay(eta, ata, 'arrival');
+  
+  let departureDelay: {
+    minutes: number;
+    status: 'on-time' | 'early' | 'delayed';
+    formatted: string;
+  } = {
+    minutes: 0,
+    status: 'on-time',
+    formatted: 'Pendiente'
+  };
+  
+  if (atd) {
+    departureDelay = analyzeTimeDelay(etd, atd, 'departure');
+  }
+  
+  // Determinar estado general (prioridad a la salida si está disponible)
+  let overallStatus: 'on-time' | 'early' | 'delayed';
+  let overallFormatted: string;
+  
+  if (atd) {
+    // Si tenemos ATD, el estado general se basa en la salida
+    overallStatus = departureDelay.status;
+    overallFormatted = departureDelay.formatted;
+  } else {
+    // Si solo tenemos ATA, el estado se basa en la llegada
+    overallStatus = arrivalDelay.status;
+    overallFormatted = arrivalDelay.formatted;
+  }
+  
+  return {
+    arrivalDelay,
+    departureDelay,
+    overallStatus,
+    overallFormatted
+  };
+}
+
+/**
  * Calcula el TPT basado en ETA y ETD
  */
 export function calculateTPT(eta: string, etd: string): TPTData {
@@ -84,7 +190,7 @@ export function calculateTPT(eta: string, etd: string): TPTData {
 }
 
 /**
- * Calcula el estado actual del TPT
+ * Calcula el estado actual del TPT con análisis detallado de retrasos
  */
 export function calculateTPTStatus(
   tptData: TPTData,
@@ -95,6 +201,14 @@ export function calculateTPTStatus(
   const now = currentTime || new Date();
   const currentMinutes = now.getHours() * 60 + now.getMinutes();
   
+  // Realizar análisis detallado de retrasos si hay datos disponibles
+  const delayAnalysis = analyzeFlightDelays(
+    tptData.eta,
+    tptData.etd,
+    actualArrivalTime,
+    actualDepartureTime
+  );
+  
   // Si no hay tiempo real de arribo, estamos esperando
   if (!actualArrivalTime) {
     return {
@@ -104,12 +218,12 @@ export function calculateTPTStatus(
       progressPercentage: 0,
       delayMinutes: 0,
       delayStatus: 'on-time',
-      delayFormatted: 'A tiempo'
+      delayFormatted: 'A tiempo',
+      delayAnalysis
     };
   }
   
   const actualArrivalMinutes = timeToMinutes(actualArrivalTime);
-  const expectedDepartureMinutes = actualArrivalMinutes + tptData.tptMinutes;
   
   // Si ya salió, calcular el análisis final
   if (actualDepartureTime) {
@@ -117,19 +231,9 @@ export function calculateTPTStatus(
     const etdMinutes = timeToMinutes(tptData.etd);
     const delayMinutes = actualDepartureMinutes - etdMinutes;
     
-    let delayStatus: 'on-time' | 'early' | 'delayed';
-    let delayFormatted: string;
-    
-    if (delayMinutes <= -5) {
-      delayStatus = 'early';
-      delayFormatted = `Adelantado ${formatDuration(Math.abs(delayMinutes))}`;
-    } else if (delayMinutes >= 5) {
-      delayStatus = 'delayed';
-      delayFormatted = `Retrasado ${formatDuration(delayMinutes)}`;
-    } else {
-      delayStatus = 'on-time';
-      delayFormatted = 'A tiempo';
-    }
+    // Usar el análisis detallado para el estado general
+    const delayStatus = delayAnalysis?.overallStatus || 'on-time';
+    const delayFormatted = delayAnalysis?.overallFormatted || 'A tiempo';
     
     return {
       phase: 'completed',
@@ -138,7 +242,8 @@ export function calculateTPTStatus(
       progressPercentage: 100,
       delayMinutes,
       delayStatus,
-      delayFormatted
+      delayFormatted,
+      delayAnalysis
     };
   }
   
@@ -147,7 +252,7 @@ export function calculateTPTStatus(
   const remainingMinutes = Math.max(0, tptData.tptMinutes - elapsedMinutes);
   const progressPercentage = Math.min(100, (elapsedMinutes / tptData.tptMinutes) * 100);
   
-  // Determinar si está retrasado
+  // Determinar si está retrasado basado en proyección
   const etdMinutes = timeToMinutes(tptData.etd);
   const projectedDepartureMinutes = actualArrivalMinutes + tptData.tptMinutes;
   const delayMinutes = projectedDepartureMinutes - etdMinutes;
@@ -175,7 +280,8 @@ export function calculateTPTStatus(
     progressPercentage,
     delayMinutes,
     delayStatus,
-    delayFormatted
+    delayFormatted,
+    delayAnalysis
   };
 }
 

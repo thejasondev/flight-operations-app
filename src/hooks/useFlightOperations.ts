@@ -133,7 +133,9 @@ export const useFlightOperations = (flight: Flight) => {
     const arriboOperation = operations["Arribo Real (ON/IN)"];
     const empujeOperation = operations["Empuje"];
     
-    const ata = arriboOperation?.start || undefined;
+    // ATA debe ser el tiempo de finalización del arribo real (end), no el inicio (start)
+    // Esto representa cuando el avión está completamente en tierra y listo para operaciones
+    const ata = arriboOperation?.end || undefined;
     const atd = empujeOperation?.start || undefined;
     
     return {

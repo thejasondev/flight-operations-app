@@ -55,7 +55,7 @@ export const TABLE_HEADERS = {
 export const STATUS_LABELS = {
   COMPLETED: '✓ COMPLETADO',
   IN_PROGRESS: '🔄 EN PROGRESO',
-  PENDING: '⏳ PENDIENTE',
+  PENDING: 'PENDIENTE',
   REGISTERED: '✓ Registrado',
   PUNCTUAL_EVENT: 'Evento Puntual',
   PUNCTUAL_OPERATION: '(Evento puntual)',

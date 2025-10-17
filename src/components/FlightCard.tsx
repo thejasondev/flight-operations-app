@@ -151,7 +151,7 @@ export default function FlightCard({ flight, onClick, onDelete, onViewReport }: 
       {/* TPT Summary */}
       <TPTSummary 
         flight={flight}
-        actualArrivalTime={flight.operations?.["Arribo Real (ON/IN)"]?.start}
+        actualArrivalTime={flight.operations?.["Arribo Real (ON/IN)"]?.end}
         actualDepartureTime={flight.operations?.["Empuje"]?.start}
         compact={true}
       />
