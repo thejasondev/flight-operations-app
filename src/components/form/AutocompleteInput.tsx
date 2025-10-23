@@ -59,16 +59,18 @@ export default function AutocompleteInput({
   return (
     <div className={className}>
       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-        {label} {required && <span className="text-red-500">*</span>}
+        {icon ? (
+          <div className="flex items-center gap-2">
+            {icon}
+            {label} {required && <span className="text-red-500">*</span>}
+          </div>
+        ) : (
+          <>
+            {label} {required && <span className="text-red-500">*</span>}
+          </>
+        )}
       </label>
       <div className="relative">
-        {icon && (
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <div className="text-gray-400 dark:text-gray-500">
-              {icon}
-            </div>
-          </div>
-        )}
         <input
           type="text"
           value={value}
@@ -77,7 +79,7 @@ export default function AutocompleteInput({
           onBlur={handleBlur}
           placeholder={placeholder}
           disabled={disabled}
-          className={`w-full ${icon ? 'pl-10' : 'pl-4'} pr-4 py-3 text-sm border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+          className={`w-full px-4 py-3 text-sm border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
             error 
               ? 'border-red-500 dark:border-red-400' 
               : 'border-gray-300 dark:border-gray-600'

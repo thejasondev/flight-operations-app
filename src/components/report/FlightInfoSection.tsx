@@ -26,6 +26,16 @@ export default function FlightInfoSection({ flight }: FlightInfoSectionProps) {
               <span className="font-medium">Avión:</span> <strong>{flight.aircraftType}</strong>
             </p>
           )}
+          {flight.aircraftRegistration && (
+            <p className="break-words">
+              <span className="font-medium">Matrícula:</span> <strong>{flight.aircraftRegistration}</strong>
+            </p>
+          )}
+          {flight.rampPosition && (
+            <p className="break-words">
+              <span className="font-medium">Posición en Rampa:</span> <strong>{flight.rampPosition}</strong>
+            </p>
+          )}
           <p className="break-words">
             <span className="font-medium">Destino:</span> <strong>{flight.destination}</strong>
           </p>

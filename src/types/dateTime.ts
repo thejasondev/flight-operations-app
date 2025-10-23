@@ -11,6 +11,7 @@ export interface DateTimeSelectorProps {
   minDate?: Date;
   maxDate?: Date;
   className?: string;
+  icon?: React.ReactNode;
 }
 
 export interface TimeState {
@@ -45,6 +46,7 @@ export interface DateTimeInputProps {
   onFocus: () => void;
   type: 'date' | 'time' | 'datetime';
   className?: string;
+  icon?: React.ReactNode;
 }
 
 // Constants

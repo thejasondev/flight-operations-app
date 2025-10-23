@@ -6,6 +6,8 @@ interface FlightFormData {
   flightNumber: string;
   airline: string;
   aircraftType: string;
+  aircraftRegistration: string;
+  rampPosition: string;
   origin: string;
   destination: string;
   secondDestination?: string;
@@ -25,6 +27,8 @@ export const useFlightForm = ({ onSubmit, commonAirlines, commonDestinations }: 
     flightNumber: '',
     airline: '',
     aircraftType: '',
+    aircraftRegistration: '',
+    rampPosition: '',
     origin: '',
     destination: '',
     secondDestination: '',
@@ -198,6 +202,8 @@ export const useFlightForm = ({ onSubmit, commonAirlines, commonDestinations }: 
       flightNumber: formData.flightNumber.trim().toUpperCase(),
       airline: formData.airline.trim(),
       aircraftType: formData.aircraftType.trim() || undefined,
+      aircraftRegistration: formData.aircraftRegistration.trim().toUpperCase() || undefined,
+      rampPosition: formData.rampPosition.trim().toUpperCase() || undefined,
       destination: routeString,
       eta: etaTime ? etaTime.toTimeString().slice(0, 5) : '',
       etd: etdTime ? etdTime.toTimeString().slice(0, 5) : '',
@@ -213,6 +219,8 @@ export const useFlightForm = ({ onSubmit, commonAirlines, commonDestinations }: 
       flightNumber: '',
       airline: '',
       aircraftType: '',
+      aircraftRegistration: '',
+      rampPosition: '',
       origin: '',
       destination: '',
       secondDestination: '',

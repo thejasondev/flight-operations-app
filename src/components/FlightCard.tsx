@@ -7,6 +7,8 @@ export interface Flight {
   flightNumber: string;
   airline: string;
   aircraftType?: string;
+  aircraftRegistration?: string;
+  rampPosition?: string;
   destination: string;
   date?: string;
   eta: string;
@@ -128,6 +130,18 @@ export default function FlightCard({ flight, onClick, onDelete, onViewReport }: 
       {flight.aircraftType && (
         <p className="text-gray-700 dark:text-gray-300 mb-2">
           <span className="font-medium">Avión:</span> {flight.aircraftType}
+        </p>
+      )}
+
+      {flight.aircraftRegistration && (
+        <p className="text-gray-700 dark:text-gray-300 mb-2">
+          <span className="font-medium">Matrícula:</span> {flight.aircraftRegistration}
+        </p>
+      )}
+
+      {flight.rampPosition && (
+        <p className="text-gray-700 dark:text-gray-300 mb-2">
+          <span className="font-medium">Posición:</span> {flight.rampPosition}
         </p>
       )}
 

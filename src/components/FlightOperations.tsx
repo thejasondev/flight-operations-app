@@ -46,6 +46,12 @@ export default function FlightOperations({
     return empujeOperation?.start || undefined;
   };
 
+  // Verificar si el empuje ha sido registrado para habilitar el botón de reporte
+  const isPushbackRegistered = () => {
+    const empujeOperation = operations["Empuje"];
+    return !!(empujeOperation?.start);
+  };
+
   return (
     <>
       {/* Subtle auto-save confirmation - only show when saved */}
@@ -113,6 +119,7 @@ export default function FlightOperations({
       <ActionButtons
         onBack={onBack}
         onComplete={handleCompleteOperations}
+        isPushbackRegistered={isPushbackRegistered()}
       />
     </div>
     </>

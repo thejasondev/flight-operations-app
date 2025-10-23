@@ -13,7 +13,8 @@ export default function DateTimeSelector({
   disabled = false,
   minDate,
   maxDate,
-  className = ''
+  className = '',
+  icon
 }: DateTimeSelectorProps) {
   const {
     isOpen,
@@ -44,6 +45,7 @@ export default function DateTimeSelector({
         onToggleOpen={toggleOpen}
         onFocus={handleFocus}
         type={type}
+        icon={icon}
       />
 
       {/* Dropdown */}

@@ -12,7 +12,8 @@ export default function DateTimeInput({
   onToggleOpen,
   onFocus,
   type,
-  className = ''
+  className = '',
+  icon
 }: DateTimeInputProps) {
   
   const getInputIcon = () => {
@@ -49,8 +50,18 @@ export default function DateTimeInput({
   return (
     <div className={`relative ${className}`}>
       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-        {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
+        {icon ? (
+          <div className="flex items-center gap-2">
+            {icon}
+            {label}
+            {required && <span className="text-red-500 ml-1">*</span>}
+          </div>
+        ) : (
+          <>
+            {label}
+            {required && <span className="text-red-500 ml-1">*</span>}
+          </>
+        )}
       </label>
       
       <div className="relative">

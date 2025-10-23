@@ -92,6 +92,11 @@ export default function RouteConfiguration({
         onSuggestionsVisibilityChange={(visible) => onSuggestionsVisibilityChange('origin', visible)}
         error={errors.origin}
         required
+        icon={
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+          </svg>
+        }
       />
 
       {/* Primary Destination Input */}
@@ -106,6 +111,11 @@ export default function RouteConfiguration({
         onSuggestionsVisibilityChange={(visible) => onSuggestionsVisibilityChange('destination', visible)}
         error={errors.destination}
         required
+        icon={
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+          </svg>
+        }
       />
 
       {/* Second Destination Input (conditional) */}
@@ -121,6 +131,11 @@ export default function RouteConfiguration({
           onSuggestionsVisibilityChange={(visible) => onSuggestionsVisibilityChange('secondDestination', visible)}
           error={errors.secondDestination}
           required
+          icon={
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+            </svg>
+          }
         />
       )}
 

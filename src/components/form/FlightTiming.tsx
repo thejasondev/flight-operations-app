@@ -34,6 +34,11 @@ export default function FlightTiming({
         onChange={onFlightDateChange}
         placeholder="Seleccionar fecha"
         minDate={new Date()}
+        icon={
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        }
       />
 
       {/* ETA and ETD */}
@@ -47,6 +52,13 @@ export default function FlightTiming({
             onChange={onEtaTimeChange}
             placeholder="Seleccionar hora ETA"
             required
+            icon={
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v13" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 21h14" />
+              </svg>
+            }
           />
           {errors.eta && (
             <p className="mt-1 text-sm text-red-500 dark:text-red-400">{errors.eta}</p>
@@ -62,6 +74,13 @@ export default function FlightTiming({
             onChange={onEtdTimeChange}
             placeholder="Seleccionar hora ETD"
             required
+            icon={
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 21V8" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3h14" />
+              </svg>
+            }
           />
           {errors.etd && (
             <p className="mt-1 text-sm text-red-500 dark:text-red-400">{errors.etd}</p>

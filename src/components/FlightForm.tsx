@@ -90,7 +90,9 @@ export default function FlightForm({ onSubmit, onCancel, isSubmitting = false }:
           flightData={{
             flightNumber: formData.flightNumber,
             airline: formData.airline,
-            aircraftType: formData.aircraftType
+            aircraftType: formData.aircraftType,
+            aircraftRegistration: formData.aircraftRegistration,
+            rampPosition: formData.rampPosition
           }}
           onDataChange={handleInputChange}
           airlineSuggestions={suggestions.airline}
