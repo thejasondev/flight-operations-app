@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
           {/* Logo y nombre de la app */}
           <div className="flex items-center space-x-3">
             <img 
-              src="/Panel OPS.webp" 
+              src="/logo/logo-ops.webp" 
               alt="Panel OPS Logo" 
               className="footer-logo footer-logo-pulse w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-gray-600"
             />

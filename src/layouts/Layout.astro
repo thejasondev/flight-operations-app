@@ -32,17 +32,16 @@ const siteName = "Panel Operaciones Aéreas";
 		<link rel="canonical" href={canonicalURL} />
 		
 		<!-- Favicon and Icons - Optimized -->
-		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
-		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" type="image/x-icon" href="/logo/favicon.ico" />
+		<link rel="icon" type="image/png" sizes="96x96" href="/logo/favicon-96x96.png" />
+		<link rel="icon" type="image/svg+xml" href="/logo/favicon.svg" />
 		
 		<!-- Apple Touch Icon -->
-		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/logo/apple-touch-icon.png" />
 		
 		<!-- Android Chrome Icons -->
-		<link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
-		<link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
+		<link rel="icon" type="image/png" sizes="192x192" href="/logo/web-app-manifest-192x192.png" />
+		<link rel="icon" type="image/png" sizes="512x512" href="/logo/web-app-manifest-512x512.png" />
 		
 		<!-- Web App Manifest -->
 		<link rel="manifest" href="/site.webmanifest" />
@@ -62,7 +61,7 @@ const siteName = "Panel Operaciones Aéreas";
 		<meta property="og:url" content={url} />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
-		<meta property="og:image" content={new URL("/android-chrome-512x512.png", Astro.url)} />
+		<meta property="og:image" content={new URL("/logo/logo-ops.png", Astro.url)} />
 		<meta property="og:image:width" content="512" />
 		<meta property="og:image:height" content="512" />
 		<meta property="og:image:type" content="image/png" />
@@ -74,7 +73,7 @@ const siteName = "Panel Operaciones Aéreas";
 		<meta property="twitter:url" content={url} />
 		<meta property="twitter:title" content={title} />
 		<meta property="twitter:description" content={description} />
-		<meta property="twitter:image" content={new URL("/android-chrome-512x512.png", Astro.url)} />
+		<meta property="twitter:image" content={new URL("/logo/logo-ops.png", Astro.url)} />
 		<meta property="twitter:image:alt" content="Panel Operaciones Aéreas Logo" />
 		
 		<!-- Mobile and PWA -->
@@ -131,64 +130,6 @@ const siteName = "Panel Operaciones Aéreas";
 		</main>
 		<Footer client:load />
 		
-		<!-- Performance optimizations script -->
-		<script>
-			// Performance optimizations - inline implementation
-			function preloadCriticalResources() {
-				const criticalImages = [
-					'/Panel OPS.webp',
-					'/android-chrome-192x192.png',
-					'/apple-touch-icon.png',
-				];
-				criticalImages.forEach(src => {
-					const link = document.createElement('link');
-					link.rel = 'preload';
-					link.as = 'image';
-					link.href = src;
-					document.head.appendChild(link);
-				});
-			}
-
-			function optimizeLocalStorage() {
-				try {
-					const usage = JSON.stringify(localStorage).length;
-					const limit = 5 * 1024 * 1024; // 5MB limit
-					
-					if (usage > limit * 0.8) {
-						const thirtyDaysAgo = new Date();
-						thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-						
-						Object.keys(localStorage).forEach(key => {
-							if (key.startsWith('flight_') || key.startsWith('operations_')) {
-								try {
-									const data = JSON.parse(localStorage.getItem(key) || '{}');
-									const dataDate = new Date(data.date || data.createdAt);
-									if (dataDate < thirtyDaysAgo) {
-										localStorage.removeItem(key);
-									}
-								} catch (e) {
-									localStorage.removeItem(key);
-								}
-							}
-						});
-					}
-				} catch (error) {
-					console.warn('LocalStorage optimization failed:', error);
-				}
-			}
-
-			// Initialize performance optimizations
-			if (document.readyState === 'loading') {
-				document.addEventListener('DOMContentLoaded', () => {
-					preloadCriticalResources();
-					optimizeLocalStorage();
-				});
-			} else {
-				preloadCriticalResources();
-				optimizeLocalStorage();
-			}
-		</script>
-
 		<!-- Theme management script -->
 		<script>
 			// Check for dark mode preference
@@ -223,6 +164,22 @@ const siteName = "Panel Operaciones Aéreas";
 				}
 				
 				return newTheme;
+			}
+		</script>
+
+		<!-- Service Worker Registration -->
+		<script>
+			if ('serviceWorker' in navigator) {
+				window.addEventListener('load', () => {
+					const isLocalhost = ['localhost', '127.0.0.1', '::1'].includes(location.hostname);
+					if (isLocalhost || location.protocol === 'https:') {
+						navigator.serviceWorker
+							.register('/service-worker.js')
+							.catch((error) => {
+								console.error('Service worker registration failed:', error);
+							});
+					}
+				});
 			}
 		</script>
 	</body>

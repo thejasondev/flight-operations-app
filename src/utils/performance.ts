@@ -5,7 +5,11 @@
  */
 export const preloadCriticalResources = () => {
   // Preload critical images
-  const criticalImages = ['/Panel OPS.webp', '/favicon.svg'];
+	const criticalImages = [
+		'/Panel OPS.webp',
+		'/logo/logo-ops.webp',
+		'/logo/favicon.svg',
+	];
   
   criticalImages.forEach(src => {
     const link = document.createElement('link');

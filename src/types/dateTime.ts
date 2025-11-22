@@ -52,11 +52,6 @@ export interface DateTimeInputProps {
 // Constants
 export const DAYS_OF_WEEK = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'] as const;
 
-export const COMMON_TIMES = [
-  '06:00', '08:00', '10:00', '12:00', '14:00', 
-  '16:00', '18:00', '20:00', '22:00'
-] as const;
-
 export const DEFAULT_TIME: TimeState = {
   hours: '14',
   minutes: '00'

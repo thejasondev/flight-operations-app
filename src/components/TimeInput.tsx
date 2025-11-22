@@ -157,12 +157,6 @@ export default function TimeInput({
     }
   };
 
-  const handleQuickTime = (time: string) => {
-    const [hours, minutes] = time.split(':');
-    handleTimeChange(hours, minutes);
-    setIsOpen(false);
-  };
-
   const sizeClasses = {
     sm: 'px-3 py-2 text-sm',
     md: 'px-4 py-2.5 text-base',
@@ -291,27 +285,6 @@ export default function TimeInput({
               </div>
 
         
-              {/* Quick time buttons */}
-              <div className="mb-4">
-                <h5 className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-2 text-center">Horarios Comunes</h5>
-                <div className="grid grid-cols-3 gap-1">
-                  {['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'].map((time) => (
-                    <button
-                      key={time}
-                      type="button"
-                      onClick={() => handleQuickTime(time)}
-                      className={`px-2 py-1 text-xs font-medium rounded transition-colors focus:outline-none focus:ring-1 focus:ring-blue-500 ${
-                        `${selectedTime.hours}:${selectedTime.minutes}` === time
-                          ? 'bg-blue-500 text-white'
-                          : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                      }`}
-                    >
-                      {time}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
               {/* Confirm Button */}
               <div className="mt-4">
                 <button

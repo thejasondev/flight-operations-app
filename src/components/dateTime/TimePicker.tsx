@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { adjustTimeValue, constrainTimeValue } from '../../utils/dateTimeUtils';
-import { COMMON_TIMES, TIME_CONSTRAINTS, type TimePickerProps } from '../../types/dateTime';
+import { TIME_CONSTRAINTS, type TimePickerProps } from '../../types/dateTime';
 
 type EditingField = 'hours' | 'minutes' | null;
 
@@ -187,32 +187,6 @@ export default function TimePicker({ selectedTime, onTimeChange, onClose }: Time
         </div>
       </div>
       
-      {/* Quick time buttons */}
-      <div className="mb-4">
-        <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 text-center">
-          Horarios Comunes
-        </h5>
-        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-2">
-          {COMMON_TIMES.map((time) => (
-            <button
-              key={time}
-              type="button"
-              onClick={() => {
-                const [hours, minutes] = time.split(':');
-                onTimeChange(hours, minutes);
-              }}
-              className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 ${
-                `${selectedTime.hours}:${selectedTime.minutes}` === time
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-              }`}
-            >
-              {time}
-            </button>
-          ))}
-        </div>
-      </div>
-
       {/* Confirm Button for time-only mode */}
       {onClose && (
         <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 -mx-4 -mb-4 px-4 pb-4">

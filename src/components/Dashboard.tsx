@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import FlightCard from "./FlightCard";
 import type { Flight } from "./FlightCard";
-import FlightOperations from "./FlightOperations";
-import Report from "./Report";
+const FlightOperations = React.lazy(() => import("./FlightOperations"));
+const Report = React.lazy(() => import("./Report"));
+const FlightForm = React.lazy(() => import("./FlightForm"));
 import ThemeToggle from "./ThemeToggle";
-import FlightForm from "./FlightForm";
 import { DeleteConfirmationModal, SwitchFlightModal } from "./ConfirmationModals";
 import { useFlightData } from "../hooks/useFlightData";
+import { initPerformanceOptimizations } from "../utils/performance";
 import "../styles/liquidGlass.css";
 
 export default function Dashboard() {
@@ -23,6 +24,11 @@ export default function Dashboard() {
     completeFlightOperation,
     setPendingFlights
   } = useFlightData();
+
+  // Initialize performance optimizations once on mount
+  useEffect(() => {
+    initPerformanceOptimizations();
+  }, []);
 
   // State for UI modals and forms
   const [showFlightForm, setShowFlightForm] = useState(false);
@@ -153,11 +159,19 @@ export default function Dashboard() {
   // If there's an active flight, show the operations view
   if (activeFlight) {
     return (
-      <FlightOperations
-        flight={activeFlight}
-        onBack={() => setActiveFlightId(null)}
-        onComplete={handleFlightOperationsComplete}
-      />
+      <Suspense
+        fallback={
+          <div className="flex items-center justify-center min-h-[50vh] text-gray-500 dark:text-gray-400">
+            Cargando operaciones de vuelo...
+          </div>
+        }
+      >
+        <FlightOperations
+          flight={activeFlight}
+          onBack={() => setActiveFlightId(null)}
+          onComplete={handleFlightOperationsComplete}
+        />
+      </Suspense>
     );
   }
 
@@ -172,7 +186,7 @@ export default function Dashboard() {
             <div className="flex items-center justify-center py-5 px-0">
               <div className="logo-container">
                 <img 
-                  src="/Panel OPS.webp" 
+                  src="/logo/logo-ops.webp" 
                   alt="Panel Operaciones Aéreas Logo" 
                   className="app-logo app-logo-md"
                 />
@@ -240,7 +254,7 @@ export default function Dashboard() {
             <div className="flex items-center">
               <div className="logo-container">
                 <img 
-                  src="/Panel OPS.webp" 
+                  src="/logo/logo-ops.webp" 
                   alt="Panel Operaciones Aéreas Logo" 
                   className="app-logo app-logo-lg"
                 />
@@ -376,17 +390,33 @@ export default function Dashboard() {
       {showFlightForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <FlightForm
-              onSubmit={handleAddFlight}
-              onCancel={() => setShowFlightForm(false)}
-            />
+            <Suspense
+              fallback={
+                <div className="flex items-center justify-center py-8 text-sm text-gray-500 dark:text-gray-400">
+                  Cargando formulario de vuelo...
+                </div>
+              }
+            >
+              <FlightForm
+                onSubmit={handleAddFlight}
+                onCancel={() => setShowFlightForm(false)}
+              />
+            </Suspense>
           </div>
         </div>
       )}
 
       {/* Report Modal */}
       {showReport && reportFlight && (
-        <Report flight={reportFlight} onClose={handleCloseReport} />
+        <Suspense
+          fallback={
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 text-sm text-gray-200">
+              Cargando reporte...
+            </div>
+          }
+        >
+          <Report flight={reportFlight} onClose={handleCloseReport} />
+        </Suspense>
       )}
 
       {/* Delete Confirmation Modal */}

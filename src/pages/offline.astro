@@ -1,0 +1,31 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Modo sin conexión - Panel de Operaciones Aéreas">
+	<main class="min-h-[60vh] flex items-center justify-center px-4 py-12 bg-gray-50 dark:bg-gray-900">
+		<div class="max-w-lg w-full text-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm px-6 py-8">
+			<div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300">
+				<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M4.93 4.93l14.14 14.14M12 2a10 10 0 00-7.07 17.07L19.07 4.93A9.97 9.97 0 0012 2z" />
+				</svg>
+			</div>
+			<h1 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+				Estás sin conexión a Internet
+			</h1>
+			<p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
+				Puedes seguir utilizando el Panel de Operaciones Aéreas con los datos que ya están guardados en este dispositivo.
+			</p>
+			<p class="text-xs text-gray-500 dark:text-gray-400 mb-6">
+				Cuando la conexión vuelva, la aplicación se actualizará automáticamente con la última versión disponible.
+			</p>
+			<button
+				type="button"
+				class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition"
+				onclick="window.location.reload()"
+			>
+				Reintentar conexión
+			</button>
+		</div>
+	</main>
+</Layout>
