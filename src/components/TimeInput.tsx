@@ -31,7 +31,11 @@ export default function TimeInput({
       const [hours, minutes] = value.split(':');
       return { hours: hours || '00', minutes: minutes || '00' };
     }
-    return { hours: '00', minutes: '00' };
+    const now = new Date();
+    return {
+      hours: now.getHours().toString().padStart(2, '0'),
+      minutes: now.getMinutes().toString().padStart(2, '0'),
+    };
   });
   
   const inputRef = useRef<HTMLInputElement>(null);
@@ -163,7 +167,7 @@ export default function TimeInput({
     lg: 'px-4 py-3 text-lg'
   };
 
-  const displayValue = value || `${selectedTime.hours}:${selectedTime.minutes}`;
+  const displayValue = value || '';
 
   return (
     <div className="relative">

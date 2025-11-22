@@ -51,6 +51,17 @@ export const extractTimeFromDate = (date: Date): TimeState => {
 };
 
 /**
+ * Get current time as TimeState (HH:mm)
+ */
+export const getCurrentTimeState = (): TimeState => {
+	const now = new Date();
+	return {
+		hours: format(now, 'HH'),
+		minutes: format(now, 'mm')
+	};
+};
+
+/**
  * Create date with time
  */
 export const createDateWithTime = (date: Date, timeState: TimeState): Date => {

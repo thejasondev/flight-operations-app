@@ -4,7 +4,8 @@ import {
   parseDateInput, 
   extractTimeFromDate,
   createDateWithTime,
-  navigateMonth as navigateMonthUtil
+  navigateMonth as navigateMonthUtil,
+  getCurrentTimeState
 } from '../utils/dateTimeUtils';
 import { DEFAULT_TIME, type TimeState } from '../types/dateTime';
 
@@ -16,7 +17,15 @@ export const useDateTimeSelector = (
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | null>(value);
-  const [selectedTime, setSelectedTime] = useState<TimeState>(DEFAULT_TIME);
+  const [selectedTime, setSelectedTime] = useState<TimeState>(() => {
+    if (value && (type === 'time' || type === 'datetime')) {
+      return extractTimeFromDate(value);
+    }
+    if (type === 'time' || type === 'datetime') {
+      return getCurrentTimeState();
+    }
+    return DEFAULT_TIME;
+  });
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Update input value when external value changes
@@ -31,6 +40,11 @@ export const useDateTimeSelector = (
     } else {
       setInputValue('');
       setSelectedDate(null);
+      if (type === 'time' || type === 'datetime') {
+        setSelectedTime(getCurrentTimeState());
+      } else {
+        setSelectedTime(DEFAULT_TIME);
+      }
     }
   }, [value, type]);
 
