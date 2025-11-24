@@ -25,7 +25,6 @@ export function useFlightData(): UseFlightDataReturn {
     try {
       const savedPendingFlights = localStorage.getItem('pendingFlights');
       const savedCompletedFlights = localStorage.getItem('completedFlights');
-      const savedActiveFlightId = localStorage.getItem('activeFlightId');
 
       if (savedPendingFlights) {
         setPendingFlights(JSON.parse(savedPendingFlights));
@@ -33,10 +32,6 @@ export function useFlightData(): UseFlightDataReturn {
 
       if (savedCompletedFlights) {
         setCompletedFlights(JSON.parse(savedCompletedFlights));
-      }
-
-      if (savedActiveFlightId) {
-        setActiveFlightIdState(savedActiveFlightId);
       }
     } catch (error) {
       console.error('Error loading data from localStorage', error);
@@ -48,16 +43,10 @@ export function useFlightData(): UseFlightDataReturn {
     try {
       localStorage.setItem('pendingFlights', JSON.stringify(pendingFlights));
       localStorage.setItem('completedFlights', JSON.stringify(completedFlights));
-
-      if (activeFlightId) {
-        localStorage.setItem('activeFlightId', activeFlightId);
-      } else {
-        localStorage.removeItem('activeFlightId');
-      }
     } catch (error) {
       console.error('Error saving data to localStorage', error);
     }
-  }, [pendingFlights, completedFlights, activeFlightId]);
+  }, [pendingFlights, completedFlights]);
 
   // Get active flight
   const activeFlight = [...pendingFlights, ...completedFlights].find(

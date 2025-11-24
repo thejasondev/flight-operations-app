@@ -6,7 +6,6 @@
 export const preloadCriticalResources = () => {
   // Preload critical images
 	const criticalImages = [
-		'/Panel OPS.webp',
 		'/logo/logo-ops.webp',
 		'/logo/favicon.svg',
 	];

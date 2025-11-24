@@ -269,6 +269,12 @@ body {
   background-color: #3b82f6 !important;
 }
 
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
 /* Print styles */
 @media print {
   .no-print {
