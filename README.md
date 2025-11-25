@@ -1,127 +1,129 @@
-# Panel de Operaciones Aéreas
+# ✈️ Panel de Operaciones Aéreas (Flight Ops Panel)
 
-Aplicación web para coordinadores de operaciones aéreas que permite gestionar vuelos y sus operaciones.
+![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Status](https://img.shields.io/badge/status-production--ready-success.svg)
+![Tech](https://img.shields.io/badge/tech-Astro%20|%20React%20|%20Tailwind-orange.svg)
 
-## Características
+Una solución moderna y profesional para la coordinación y gestión de operaciones aéreas en tiempo real. Diseñada con un enfoque **Mobile-First** y una estética **Liquid Glass** premium.
 
-- Interfaz moderna y profesional con soporte para tema claro y oscuro
-- Gestión completa de vuelos: pendientes, en progreso y completados
-- Registro detallado de operaciones de vuelo con tiempos
-- Generación de reportes imprimibles
-- Almacenamiento local de datos para persistencia entre sesiones
+---
 
-## Tecnologías
+## ✨ Características Principales
 
-- [Astro](https://astro.build/)
-- [React](https://reactjs.org/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [pnpm](https://pnpm.io/)
+### 🎨 Diseño & UX Premium
 
-## Requisitos
+- **Estética Liquid Glass:** Interfaz moderna con efectos de vidrio esmerilado (Frosty Glass en modo claro, Translucent en modo oscuro).
+- **Modo Oscuro/Claro:** Sistema de temas totalmente integrado y optimizado para cualquier condición de iluminación.
+- **Mobile-First:** Experiencia nativa en móviles con menú inferior ergonómico y gestos táctiles.
+- **Animaciones Fluidas:** Transiciones suaves y micro-interacciones para una experiencia de usuario pulida.
+
+### 🛠️ Funcionalidades Operativas
+
+- **Gestión de Vuelos:** Flujo completo desde "Pendiente" → "En Progreso" → "Completado".
+- **Wizard de Creación:** Formulario paso a paso intuitivo para registrar nuevos vuelos.
+- **Cronometraje de Operaciones:** Registro preciso de tiempos (ETA, ETD, Bloque, etc.).
+- **Validación Inteligente:** Formularios con validación en tiempo real y feedback visual inmediato (Toasts).
+- **Reportes Automáticos:** Generación de reportes detallados listos para imprimir o exportar.
+- **Persistencia de Datos:** Almacenamiento local seguro para no perder información entre sesiones.
+
+---
+
+## 🚀 Tecnologías
+
+Este proyecto está construido con un stack moderno y performante:
+
+- **Framework:** [Astro](https://astro.build/) (Rendimiento estático + Islas dinámicas)
+- **UI Library:** [React](https://reactjs.org/) (Componentes interactivos)
+- **Lenguaje:** [TypeScript](https://www.typescriptlang.org/) (Tipado estático y seguridad)
+- **Estilos:** [Tailwind CSS](https://tailwindcss.com/) + CSS Modules (Diseño responsivo y custom)
+- **Iconos:** Heroicons / SVGs optimizados
+- **Paquetes:** `pnpm` (Gestión eficiente de dependencias)
+
+---
+
+## 📱 Capturas de Pantalla
+
+|  Dashboard Móvil   |      Menú Inferior      |   Modo Oscuro    |
+| :----------------: | :---------------------: | :--------------: |
+| _Vista optimizada_ | _Navegación ergonómica_ | _Alto contraste_ |
+
+---
+
+## 🛠️ Instalación y Desarrollo
+
+### Prerrequisitos
 
 - Node.js (v18 o superior)
-- pnpm
+- pnpm (recomendado) o npm
 
-## Instalación
+### Pasos
 
-1. Clonar el repositorio:
+1. **Clonar el repositorio**
 
    ```bash
-   git clone [URL_DEL_REPOSITORIO]
+   git clone https://github.com/tu-usuario/flight-operations-app.git
    cd flight-operations-app
    ```
 
-2. Instalar dependencias:
+2. **Instalar dependencias**
 
    ```bash
    pnpm install
    ```
 
-3. Iniciar el servidor de desarrollo:
+3. **Iniciar servidor de desarrollo**
 
    ```bash
-   pnpm run dev
+   pnpm dev
    ```
 
-4. Abrir el navegador en:
+   Visita `http://localhost:4321` en tu navegador.
+
+4. **Construir para producción**
+   ```bash
+   pnpm build
    ```
-   http://localhost:4321
-   ```
 
-## Uso
+---
 
-### Agregar un nuevo vuelo
-
-1. Complete el formulario en la sección "Agregar Vuelo" con los datos del vuelo.
-2. Haga clic en "Agregar Vuelo" para añadirlo a la lista de pendientes.
-
-### Gestionar operaciones de un vuelo
-
-1. Haga clic en un vuelo pendiente para iniciar sus operaciones.
-2. Registre los tiempos de inicio y finalización de cada operación.
-3. Añada notas adicionales si es necesario.
-4. Haga clic en "Finalizar y Generar Reporte" cuando todas las operaciones estén completas.
-
-### Imprimir reportes
-
-1. Al completar un vuelo, se mostrará automáticamente el reporte.
-2. Haga clic en "Imprimir Reporte" para abrir el diálogo de Impresión del navegador.
-2. Haga clic en "Imprimir Reporte" para abrir el diálogo de impresión del navegador.
-
-## Construcción para producción
-
-Para generar la versión de producción:
-
-```bash
-pnpm run build
-```
-
-Los archivos se generarán en la carpeta `dist/`.
-
-```sh
-pnpm create astro@latest -- --template basics
-```
-
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
+## 📂 Estructura del Proyecto
 
 ```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
+src/
+├── components/       # Componentes React reutilizables (UI, Forms, Modals)
+├── data/            # Datos estáticos y configuraciones
+├── hooks/           # Custom Hooks (useFlightData, useFlightForm)
+├── layouts/         # Layouts principales de Astro
+├── pages/           # Rutas de la aplicación
+├── styles/          # Archivos CSS globales y módulos (liquidGlass.css)
+└── utils/           # Funciones de utilidad y helpers
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+---
 
-## 🧞 Commands
+## 🤝 Contribución
 
-All commands are run from the root of the project, from a terminal:
+Las contribuciones son bienvenidas. Por favor, abre un issue primero para discutir los cambios que te gustaría realizar.
 
-| Command                | Action                                           |
-| :--------------------- | :----------------------------------------------- |
-| `pnpm install`         | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+1. Haz un Fork del proyecto
+2. Crea tu rama de características (`git checkout -b feature/AmazingFeature`)
+3. Haz Commit de tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Haz Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
 
-## 👀 Want to learn more?
+---
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT - mira el archivo [LICENSE](LICENSE) para más detalles.
+
+---
+
+<div align="center">
+  <p>Desarrollado por <b>thejasondev</b></p>
+  <p>
+    <a href="https://thejasondev.vercel.app">Portfolio</a> •
+    <a href="https://github.com/thejasondev">GitHub</a>
+  </p>
+</div>

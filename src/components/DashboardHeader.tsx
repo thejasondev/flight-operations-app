@@ -1,5 +1,5 @@
-import React from "react";
-import ThemeToggle from "./ThemeToggle";
+import React from 'react';
+import ThemeToggle from './ThemeToggle';
 
 interface DashboardHeaderProps {
   pendingCount: number;
@@ -20,75 +20,16 @@ export default function DashboardHeader({
         {/* Mobile Header */}
         <div className="sm:hidden mobile-header-container">
           {/* Top section: Logo and title */}
-          <div className="flex items-center justify-center py-5 px-0">
-            <div className="logo-container">
+          <div className="flex items-center justify-center py-4 px-4">
+            <div className="logo-container flex flex-col items-center gap-2">
               <img
                 src="/logo/logo-ops.webp"
                 alt="Panel Operaciones Aéreas Logo"
-                className="app-logo app-logo-md"
+                className="app-logo w-10 h-10 rounded-xl shadow-md"
               />
-              <h1 className="text-lg font-bold text-gray-900 dark:text-white text-center">
+              <h1 className="text-base font-bold text-gray-900 dark:text-white text-center leading-tight">
                 Panel de Operaciones Aéreas
               </h1>
-            </div>
-          </div>
-
-          {/* Action buttons section */}
-          <div className="mobile-action-section border-t border-gray-100 dark:border-gray-600 px-4 py-4">
-            <div className="flex items-center justify-center space-x-4">
-              {/* Theme Toggle with label */}
-              <div className="mobile-theme-toggle-container flex flex-col items-center space-y-1">
-                <ThemeToggle />
-                <span className="text-xs mobile-stats-label">Modo</span>
-              </div>
-
-              {/* Separator */}
-              <div className="w-px h-10 bg-gradient-to-b from-transparent via-gray-300 to-transparent dark:via-gray-500" />
-
-              {/* Add Flight Button - Enhanced with Liquid Glass */}
-              <button
-                onClick={onNewFlight}
-                className="liquid-glass-button group relative inline-flex items-center justify-center px-6 py-3 text-blue-700 dark:text-blue-300 font-semibold text-sm min-w-[140px]"
-              >
-                <svg
-                  className="w-5 h-5 mr-2 relative z-10"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2.5}
-                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                  />
-                </svg>
-                <span className="relative z-10">Nuevo Vuelo</span>
-              </button>
-            </div>
-
-            {/* Quick stats or status indicator */}
-            <div className="mobile-stats-indicator flex items-center justify-center mt-4 pt-4 border-t border-gray-200 dark:border-gray-600">
-              <div className="flex items-center space-x-6 text-xs">
-                <div className="flex items-center space-x-2">
-                  <div className="mobile-stats-dot pulse w-2.5 h-2.5 bg-yellow-400 rounded-full" />
-                  <span className="mobile-stats-label font-medium">
-                    {pendingCount} Pendientes
-                  </span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="mobile-stats-dot pulse w-2.5 h-2.5 bg-blue-400 rounded-full" />
-                  <span className="mobile-stats-label font-medium">
-                    {inProgressCount} En Progreso
-                  </span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="mobile-stats-dot w-2.5 h-2.5 bg-green-400 rounded-full" />
-                  <span className="mobile-stats-label font-medium">
-                    {completedCount} Completados
-                  </span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -113,12 +54,7 @@ export default function DashboardHeader({
               onClick={onNewFlight}
               className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-colors font-medium"
             >
-              <svg
-                className="w-5 h-5 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"

@@ -1,14 +1,16 @@
-import React, { useState, useEffect, Suspense } from "react";
-import type { Flight } from "./FlightCard";
-const FlightOperations = React.lazy(() => import("./FlightOperations"));
-const Report = React.lazy(() => import("./Report"));
-const FlightForm = React.lazy(() => import("./FlightForm"));
-import DashboardHeader from "./DashboardHeader";
-import DashboardMainContent from "./DashboardMainContent";
-import { DeleteConfirmationModal, SwitchFlightModal } from "./ConfirmationModals";
-import { useFlightData } from "../hooks/useFlightData";
-import { initPerformanceOptimizations } from "../utils/performance";
-import "../styles/liquidGlass.css";
+import React, { useState, useEffect, Suspense } from 'react';
+import type { Flight } from './FlightCard';
+const FlightOperations = React.lazy(() => import('./FlightOperations'));
+const Report = React.lazy(() => import('./Report'));
+const FlightForm = React.lazy(() => import('./FlightForm'));
+import DashboardHeader from './DashboardHeader';
+import DashboardMainContent from './DashboardMainContent';
+import { DeleteConfirmationModal, SwitchFlightModal } from './ConfirmationModals';
+import SuccessToast from './SuccessToast';
+import BottomMenu from './BottomMenu';
+import { useFlightData } from '../hooks/useFlightData';
+import { initPerformanceOptimizations } from '../utils/performance';
+import '../styles/liquidGlass.css';
 
 export default function Dashboard() {
   // Use custom hook for flight data management
@@ -22,7 +24,7 @@ export default function Dashboard() {
     setActiveFlightId,
     updateFlight,
     completeFlightOperation,
-    setPendingFlights
+    setPendingFlights,
   } = useFlightData();
 
   // Initialize performance optimizations once on mount
@@ -35,14 +37,24 @@ export default function Dashboard() {
   const [showReport, setShowReport] = useState(false);
   const [reportFlight, setReportFlight] = useState<Flight | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [flightToDelete, setFlightToDelete] = useState<{id: string, type: 'pending' | 'completed'} | null>(null);
+  const [flightToDelete, setFlightToDelete] = useState<{
+    id: string;
+    type: 'pending' | 'completed';
+  } | null>(null);
   const [showSwitchModal, setShowSwitchModal] = useState(false);
   const [flightToSwitch, setFlightToSwitch] = useState<string | null>(null);
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [activeTab, setActiveTab] = useState<'pending' | 'in-progress' | 'completed'>('pending');
 
   // Handle adding a new flight
   const handleAddFlight = (flightData: Omit<Flight, 'id' | 'status'>) => {
     addFlight(flightData);
     setShowFlightForm(false);
+    setSuccessMessage('✅ Vuelo creado exitosamente');
+    setShowSuccessToast(true);
+    // Switch to pending tab to see the new flight
+    setActiveTab('pending');
   };
 
   // Move a flight to "in-progress" status
@@ -56,15 +68,16 @@ export default function Dashboard() {
 
     // Set the flight as active
     setActiveFlightId(flightId);
-    
+
     // Update the flight status to in-progress
-    setPendingFlights(prev =>
-      prev.map(flight =>
-        flight.id === flightId
-          ? { ...flight, status: 'in-progress' as const }
-          : flight
+    setPendingFlights((prev) =>
+      prev.map((flight) =>
+        flight.id === flightId ? { ...flight, status: 'in-progress' as const } : flight
       )
     );
+
+    // Switch to in-progress tab
+    setActiveTab('in-progress');
   };
 
   // Handle flight operations completion
@@ -72,6 +85,8 @@ export default function Dashboard() {
     completeFlightOperation(updatedFlight);
     setReportFlight(updatedFlight);
     setShowReport(true);
+    // Switch to completed tab
+    setActiveTab('completed');
   };
 
   // Close the report modal
@@ -112,27 +127,24 @@ export default function Dashboard() {
 
     // Reset current active flight to pending
     if (activeFlightId) {
-      setPendingFlights(prev =>
-        prev.map(flight =>
-          flight.id === activeFlightId
-            ? { ...flight, status: 'pending' as const }
-            : flight
+      setPendingFlights((prev) =>
+        prev.map((flight) =>
+          flight.id === activeFlightId ? { ...flight, status: 'pending' as const } : flight
         )
       );
     }
 
     // Set new flight as active
     setActiveFlightId(flightToSwitch);
-    setPendingFlights(prev =>
-      prev.map(flight =>
-        flight.id === flightToSwitch
-          ? { ...flight, status: 'in-progress' as const }
-          : flight
+    setPendingFlights((prev) =>
+      prev.map((flight) =>
+        flight.id === flightToSwitch ? { ...flight, status: 'in-progress' as const } : flight
       )
     );
 
     setShowSwitchModal(false);
     setFlightToSwitch(null);
+    setActiveTab('in-progress');
   };
 
   // Cancel flight switch
@@ -142,22 +154,22 @@ export default function Dashboard() {
   };
 
   // Get flight details for modals
-  const flightToDeleteDetails = flightToDelete 
+  const flightToDeleteDetails = flightToDelete
     ? flightToDelete.type === 'pending'
-      ? pendingFlights.find(f => f.id === flightToDelete.id)
-      : completedFlights.find(f => f.id === flightToDelete.id)
+      ? pendingFlights.find((f) => f.id === flightToDelete.id)
+      : completedFlights.find((f) => f.id === flightToDelete.id)
     : null;
 
-  const currentActiveFlight = activeFlightId 
-    ? pendingFlights.find(f => f.id === activeFlightId)
+  const currentActiveFlight = activeFlightId
+    ? pendingFlights.find((f) => f.id === activeFlightId)
     : null;
 
-  const newFlightToSwitch = flightToSwitch 
-    ? pendingFlights.find(f => f.id === flightToSwitch)
+  const newFlightToSwitch = flightToSwitch
+    ? pendingFlights.find((f) => f.id === flightToSwitch)
     : null;
 
-  const pendingCount = pendingFlights.filter(f => f.status === 'pending').length;
-  const inProgressCount = pendingFlights.filter(f => f.status === 'in-progress').length;
+  const pendingCount = pendingFlights.filter((f) => f.status === 'pending').length;
+  const inProgressCount = pendingFlights.filter((f) => f.status === 'in-progress').length;
   const completedCount = completedFlights.length;
 
   // If there's an active flight, show the operations view
@@ -180,7 +192,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 transition-colors">
+    <div className="bg-gray-50 dark:bg-gray-900 transition-colors min-h-screen pb-20 sm:pb-0">
       {/* Header */}
       <DashboardHeader
         pendingCount={pendingCount}
@@ -190,9 +202,6 @@ export default function Dashboard() {
       />
 
       {/* Main Content */}
-      {/* Pending Flights */}
-      {/* In Progress Flights */}
-      {/* Completed Flights */}
       <DashboardMainContent
         pendingFlights={pendingFlights}
         completedFlights={completedFlights}
@@ -201,6 +210,17 @@ export default function Dashboard() {
         onConfirmDelete={confirmDeleteFlight}
         onViewReport={handleViewReport}
         onNewFlight={() => setShowFlightForm(true)}
+        activeTab={activeTab}
+      />
+
+      {/* Bottom Menu for Mobile */}
+      <BottomMenu
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        onNewFlight={() => setShowFlightForm(true)}
+        pendingCount={pendingCount}
+        inProgressCount={inProgressCount}
+        completedCount={completedCount}
       />
 
       {/* Flight Form Modal */}
@@ -214,10 +234,7 @@ export default function Dashboard() {
                 </div>
               }
             >
-              <FlightForm
-                onSubmit={handleAddFlight}
-                onCancel={() => setShowFlightForm(false)}
-              />
+              <FlightForm onSubmit={handleAddFlight} onCancel={() => setShowFlightForm(false)} />
             </Suspense>
           </div>
         </div>
@@ -251,6 +268,14 @@ export default function Dashboard() {
         newFlight={newFlightToSwitch || null}
         onConfirm={confirmFlightSwitch}
         onCancel={cancelFlightSwitch}
+      />
+
+      {/* Success Toast */}
+      <SuccessToast
+        isVisible={showSuccessToast}
+        message={successMessage}
+        onClose={() => setShowSuccessToast(false)}
+        duration={3000}
       />
     </div>
   );

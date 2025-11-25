@@ -22,7 +22,11 @@ interface UseFlightFormProps {
   commonDestinations: string[];
 }
 
-export const useFlightForm = ({ onSubmit, commonAirlines, commonDestinations }: UseFlightFormProps) => {
+export const useFlightForm = ({
+  onSubmit,
+  commonAirlines,
+  commonDestinations,
+}: UseFlightFormProps) => {
   const [formData, setFormData] = useState<FlightFormData>({
     flightNumber: '',
     airline: '',
@@ -33,14 +37,14 @@ export const useFlightForm = ({ onSubmit, commonAirlines, commonDestinations }: 
     destination: '',
     secondDestination: '',
     eta: '',
-    etd: ''
+    etd: '',
   });
 
   const [flightDate, setFlightDate] = useState<Date | null>(null);
   const [etaTime, setEtaTime] = useState<Date | null>(null);
   const [etdTime, setEtdTime] = useState<Date | null>(null);
   const [errors, setErrors] = useState<Partial<FlightFormData>>({});
-  
+
   // Estados para autocompletado
   const [airlineSuggestions, setAirlineSuggestions] = useState<string[]>([]);
   const [aircraftTypeSuggestions, setAircraftTypeSuggestions] = useState<string[]>([]);
@@ -94,17 +98,17 @@ export const useFlightForm = ({ onSubmit, commonAirlines, commonDestinations }: 
   };
 
   const handleInputChange = (field: keyof FlightFormData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    
+    setFormData((prev) => ({ ...prev, [field]: value }));
+
     // Clear error when user starts typing
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
 
     // Autocompletado para aerolíneas
     if (field === 'airline') {
       if (value.length > 0) {
-        const filtered = commonAirlines.filter(airline =>
+        const filtered = commonAirlines.filter((airline) =>
           airline.toLowerCase().includes(value.toLowerCase())
         );
         setAirlineSuggestions(filtered.slice(0, 5));
@@ -112,10 +116,10 @@ export const useFlightForm = ({ onSubmit, commonAirlines, commonDestinations }: 
       } else {
         setShowAirlineSuggestions(false);
       }
-      
+
       // Limpiar tipo de avión cuando cambia la aerolínea
       if (formData.aircraftType) {
-        setFormData(prev => ({ ...prev, aircraftType: '' }));
+        setFormData((prev) => ({ ...prev, aircraftType: '' }));
       }
     }
 
@@ -133,7 +137,7 @@ export const useFlightForm = ({ onSubmit, commonAirlines, commonDestinations }: 
     // Autocompletado para origen
     if (field === 'origin') {
       if (value.length > 0) {
-        const filtered = commonDestinations.filter(destination =>
+        const filtered = commonDestinations.filter((destination) =>
           destination.toLowerCase().includes(value.toLowerCase())
         );
         setOriginSuggestions(filtered.slice(0, 5));
@@ -146,7 +150,7 @@ export const useFlightForm = ({ onSubmit, commonAirlines, commonDestinations }: 
     // Autocompletado para destino principal
     if (field === 'destination') {
       if (value.length > 0) {
-        const filtered = commonDestinations.filter(destination =>
+        const filtered = commonDestinations.filter((destination) =>
           destination.toLowerCase().includes(value.toLowerCase())
         );
         setDestinationSuggestions(filtered.slice(0, 5));
@@ -159,7 +163,7 @@ export const useFlightForm = ({ onSubmit, commonAirlines, commonDestinations }: 
     // Autocompletado para segundo destino
     if (field === 'secondDestination') {
       if (value.length > 0) {
-        const filtered = commonDestinations.filter(destination =>
+        const filtered = commonDestinations.filter((destination) =>
           destination.toLowerCase().includes(value.toLowerCase())
         );
         setSecondDestinationSuggestions(filtered.slice(0, 5));
@@ -171,7 +175,7 @@ export const useFlightForm = ({ onSubmit, commonAirlines, commonDestinations }: 
   };
 
   const selectSuggestion = (field: keyof FlightFormData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
     if (field === 'airline') {
       setShowAirlineSuggestions(false);
     } else if (field === 'aircraftType') {
@@ -185,9 +189,11 @@ export const useFlightForm = ({ onSubmit, commonAirlines, commonDestinations }: 
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
+  const handleSubmit = (e?: React.FormEvent) => {
+    if (e) {
+      e.preventDefault();
+    }
+
     if (!validateForm()) {
       return;
     }
@@ -208,7 +214,7 @@ export const useFlightForm = ({ onSubmit, commonAirlines, commonDestinations }: 
       eta: etaTime ? etaTime.toTimeString().slice(0, 5) : '',
       etd: etdTime ? etdTime.toTimeString().slice(0, 5) : '',
       date: flightDate ? flightDate.toLocaleDateString('es-ES') : undefined,
-      operations: {}
+      operations: {},
     };
 
     onSubmit(flightData);
@@ -225,7 +231,7 @@ export const useFlightForm = ({ onSubmit, commonAirlines, commonDestinations }: 
       destination: '',
       secondDestination: '',
       eta: '',
-      etd: ''
+      etd: '',
     });
     setFlightDate(null);
     setEtaTime(null);

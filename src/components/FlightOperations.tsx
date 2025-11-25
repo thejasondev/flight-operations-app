@@ -1,20 +1,11 @@
-import React from "react";
-import { useFlightOperations } from "../hooks/useFlightOperations";
-import { 
-  OperationsList, 
-  OperationTable, 
-  NotesSection, 
-  ActionButtons 
-} from "./operations";
-import AutoSaveIndicator from "./AutoSaveIndicator";
-import TPTTimer from "./TPTTimer";
-import type { FlightOperationsProps } from "../types/operations";
+import React from 'react';
+import { useFlightOperations } from '../hooks/useFlightOperations';
+import { OperationsList, OperationTable, NotesSection, ActionButtons } from './operations';
+import AutoSaveIndicator from './AutoSaveIndicator';
+import TPTTimer from './TPTTimer';
+import type { FlightOperationsProps } from '../types/operations';
 
-export default function FlightOperations({
-  flight,
-  onComplete,
-  onBack,
-}: FlightOperationsProps) {
+export default function FlightOperations({ flight, onComplete, onBack }: FlightOperationsProps) {
   const {
     operations,
     notes,
@@ -35,36 +26,32 @@ export default function FlightOperations({
 
   // Extraer tiempos reales de las operaciones
   const getActualArrivalTime = () => {
-    const arriboOperation = operations["Arribo Real (ON/IN)"];
+    const arriboOperation = operations['Arribo Real (ON/IN)'];
     // TPT debe comenzar cuando el arribo real FINALIZA (end), no cuando inicia (start)
     // Esto representa cuando el avión está completamente en tierra y listo para operaciones
     return arriboOperation?.end || undefined;
   };
 
   const getActualDepartureTime = () => {
-    const empujeOperation = operations["Empuje"];
+    const empujeOperation = operations['Empuje'];
     return empujeOperation?.start || undefined;
   };
 
   // Verificar si el empuje ha sido registrado para habilitar el botón de reporte
   const isPushbackRegistered = () => {
-    const empujeOperation = operations["Empuje"];
-    return !!(empujeOperation?.start);
+    const empujeOperation = operations['Empuje'];
+    return !!empujeOperation?.start;
   };
 
   return (
     <>
       {/* Subtle auto-save confirmation - only show when saved */}
-      <AutoSaveIndicator 
-        isVisible={saveStatus === 'saved'} 
-        message="Guardado"
-        type="saved"
-      />
-      
-      {/* TPT Timer - Solo mostrar si hay ETA y ETD */}
+      <AutoSaveIndicator isVisible={saveStatus === 'saved'} message="Guardado" type="saved" />
+
+      {/* TPT Timer - Optimizado para móvil con layout compacto */}
       {flight.eta && flight.etd && (
-        <div className="mb-6">
-          <TPTTimer 
+        <div className="mb-4 md:mb-6">
+          <TPTTimer
             flight={flight}
             actualArrivalTime={getActualArrivalTime()}
             actualDepartureTime={getActualDepartureTime()}
@@ -78,7 +65,7 @@ export default function FlightOperations({
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
               Operaciones de Vuelo
             </h3>
-            
+
             {/* Subtle status indicator in header - only when actively saving */}
             {saveStatus === 'saving' && (
               <div className="flex items-center space-x-1 text-xs text-gray-400 dark:text-gray-500">
@@ -88,40 +75,37 @@ export default function FlightOperations({
             )}
           </div>
 
-        {/* Vista móvil: Lista de tarjetas */}
-        <OperationsList
-          operations={operations}
-          isSingleTimeOperation={isSingleTimeOperation}
-          onTimeChange={handleTimeChange}
-          onStartOperation={handleStartOperation}
-          onEndOperation={handleEndOperation}
-          onSingleTimeOperation={handleSingleTimeOperation}
-        />
+          {/* Vista móvil: Lista de tarjetas */}
+          <OperationsList
+            operations={operations}
+            isSingleTimeOperation={isSingleTimeOperation}
+            onTimeChange={handleTimeChange}
+            onStartOperation={handleStartOperation}
+            onEndOperation={handleEndOperation}
+            onSingleTimeOperation={handleSingleTimeOperation}
+          />
 
-        {/* Vista desktop: Tabla */}
-        <OperationTable
-          operations={operations}
-          isSingleTimeOperation={isSingleTimeOperation}
-          onTimeChange={handleTimeChange}
-          onStartOperation={handleStartOperation}
-          onEndOperation={handleEndOperation}
-          onSingleTimeOperation={handleSingleTimeOperation}
+          {/* Vista desktop: Tabla */}
+          <OperationTable
+            operations={operations}
+            isSingleTimeOperation={isSingleTimeOperation}
+            onTimeChange={handleTimeChange}
+            onStartOperation={handleStartOperation}
+            onEndOperation={handleEndOperation}
+            onSingleTimeOperation={handleSingleTimeOperation}
+          />
+        </div>
+
+        {/* Notas */}
+        <NotesSection notes={notes} onNotesChange={setNotes} />
+
+        {/* Botones de acción */}
+        <ActionButtons
+          onBack={onBack}
+          onComplete={handleCompleteOperations}
+          isPushbackRegistered={isPushbackRegistered()}
         />
       </div>
-
-      {/* Notas */}
-      <NotesSection
-        notes={notes}
-        onNotesChange={setNotes}
-      />
-
-      {/* Botones de acción */}
-      <ActionButtons
-        onBack={onBack}
-        onComplete={handleCompleteOperations}
-        isPushbackRegistered={isPushbackRegistered()}
-      />
-    </div>
     </>
   );
 }

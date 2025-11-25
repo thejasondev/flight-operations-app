@@ -1,15 +1,16 @@
-import React, { useState } from "react";
-import FlightCard from "./FlightCard";
-import type { Flight } from "./FlightCard";
+import React, { useState } from 'react';
+import FlightCard from './FlightCard';
+import type { Flight } from './FlightCard';
 
 interface DashboardMainContentProps {
   pendingFlights: Flight[];
   completedFlights: Flight[];
   onActivateFlight: (flightId: string) => void;
   onSetActiveFlight: (flightId: string) => void;
-  onConfirmDelete: (flightId: string, type: "pending" | "completed") => void;
+  onConfirmDelete: (flightId: string, type: 'pending' | 'completed') => void;
   onViewReport: (flight: Flight) => void;
   onNewFlight: () => void;
+  activeTab: 'pending' | 'in-progress' | 'completed';
 }
 
 export default function DashboardMainContent({
@@ -20,11 +21,11 @@ export default function DashboardMainContent({
   onConfirmDelete,
   onViewReport,
   onNewFlight,
+  activeTab,
 }: DashboardMainContentProps) {
-  const pendingCount = pendingFlights.filter((f) => f.status === "pending").length;
-  const inProgressCount = pendingFlights.filter((f) => f.status === "in-progress").length;
+  const pendingCount = pendingFlights.filter((f) => f.status === 'pending').length;
+  const inProgressCount = pendingFlights.filter((f) => f.status === 'in-progress').length;
   const completedCount = completedFlights.length;
-  const [activeTab, setActiveTab] = useState<"pending" | "in-progress" | "completed">("pending");
 
   return (
     <main className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-6 pb-24 sm:pb-6">
@@ -33,7 +34,7 @@ export default function DashboardMainContent({
         {/* Pending Flights */}
         <div
           className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 ${
-            activeTab === "pending" ? "block" : "hidden"
+            activeTab === 'pending' ? 'block' : 'hidden'
           } sm:block`}
         >
           <div className="p-4 sm:p-6">
@@ -45,13 +46,13 @@ export default function DashboardMainContent({
             </h2>
             <div className="space-y-3 sm:space-y-4 max-h-[45vh] sm:max-h-[50vh] lg:max-h-[55vh] overflow-y-auto pr-1 sm:pr-2">
               {pendingFlights
-                .filter((f) => f.status === "pending")
+                .filter((f) => f.status === 'pending')
                 .map((flight) => (
                   <FlightCard
                     key={flight.id}
                     flight={flight}
                     onClick={() => onActivateFlight(flight.id)}
-                    onDelete={() => onConfirmDelete(flight.id, "pending")}
+                    onDelete={() => onConfirmDelete(flight.id, 'pending')}
                   />
                 ))}
               {pendingCount === 0 && (
@@ -86,7 +87,7 @@ export default function DashboardMainContent({
         {/* In Progreso Flights */}
         <div
           className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 ${
-            activeTab === "in-progress" ? "block" : "hidden"
+            activeTab === 'in-progress' ? 'block' : 'hidden'
           } sm:block`}
         >
           <div className="p-4 sm:p-6">
@@ -98,13 +99,13 @@ export default function DashboardMainContent({
             </h2>
             <div className="space-y-3 sm:space-y-4 max-h-[45vh] sm:max-h-[50vh] lg:max-h-[55vh] overflow-y-auto pr-1 sm:pr-2">
               {pendingFlights
-                .filter((f) => f.status === "in-progress")
+                .filter((f) => f.status === 'in-progress')
                 .map((flight) => (
                   <FlightCard
                     key={flight.id}
                     flight={flight}
                     onClick={() => onSetActiveFlight(flight.id)}
-                    onDelete={() => onConfirmDelete(flight.id, "pending")}
+                    onDelete={() => onConfirmDelete(flight.id, 'pending')}
                   />
                 ))}
               {inProgressCount === 0 && (
@@ -133,7 +134,7 @@ export default function DashboardMainContent({
         {/* Completed Flights */}
         <div
           className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 ${
-            activeTab === "completed" ? "block" : "hidden"
+            activeTab === 'completed' ? 'block' : 'hidden'
           } sm:block`}
         >
           <div className="p-4 sm:p-6">
@@ -148,7 +149,7 @@ export default function DashboardMainContent({
                 <FlightCard
                   key={flight.id}
                   flight={flight}
-                  onDelete={() => onConfirmDelete(flight.id, "completed")}
+                  onDelete={() => onConfirmDelete(flight.id, 'completed')}
                   onViewReport={() => onViewReport(flight)}
                 />
               ))}
@@ -175,91 +176,6 @@ export default function DashboardMainContent({
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Menú de navegación inferior para móvil */}
-      <div
-        className="fixed inset-x-0 bottom-0 z-30 bg-white/95 dark:bg-gray-900/95 border-t border-gray-200 dark:border-gray-700 backdrop-blur sm:hidden safe-area-bottom"
-      >
-        <nav className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
-          <button
-            type="button"
-            onClick={() => setActiveTab("pending")}
-            className={`flex-1 flex flex-col items-center justify-center gap-1 px-2 py-1 text-xs ${
-              activeTab === "pending"
-                ? "text-blue-600 dark:text-blue-400"
-                : "text-gray-500 dark:text-gray-400"
-            }`}
-            aria-current={activeTab === "pending" ? "page" : undefined}
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
-            <span>Pendientes</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab("in-progress")}
-            className={`flex-1 flex flex-col items-center justify-center gap-1 px-2 py-1 text-xs ${
-              activeTab === "in-progress"
-                ? "text-blue-600 dark:text-blue-400"
-                : "text-gray-500 dark:text-gray-400"
-            }`}
-            aria-current={activeTab === "in-progress" ? "page" : undefined}
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 10V3L4 14h7v7l9-11h-7z"
-              />
-            </svg>
-            <span>En Progreso</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab("completed")}
-            className={`flex-1 flex flex-col items-center justify-center gap-1 px-2 py-1 text-xs ${
-              activeTab === "completed"
-                ? "text-blue-600 dark:text-blue-400"
-                : "text-gray-500 dark:text-gray-400"
-            }`}
-            aria-current={activeTab === "completed" ? "page" : undefined}
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span>Completados</span>
-          </button>
-        </nav>
       </div>
     </main>
   );

@@ -16,6 +16,9 @@ interface AutocompleteInputProps {
   disabled?: boolean;
   icon?: React.ReactNode;
   className?: string;
+  inputMode?: 'text' | 'none' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal' | 'search';
+  autoComplete?: string;
+  autoCapitalize?: 'off' | 'none' | 'on' | 'sentences' | 'words' | 'characters';
 }
 
 export default function AutocompleteInput({
@@ -33,7 +36,10 @@ export default function AutocompleteInput({
   required = false,
   disabled = false,
   icon,
-  className = ''
+  className = '',
+  inputMode = 'text',
+  autoComplete = 'off',
+  autoCapitalize = 'words',
 }: AutocompleteInputProps) {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
@@ -73,6 +79,9 @@ export default function AutocompleteInput({
       <div className="relative">
         <input
           type="text"
+          inputMode={inputMode}
+          autoComplete={autoComplete}
+          autoCapitalize={autoCapitalize}
           value={value}
           onChange={handleInputChange}
           onFocus={handleFocus}
@@ -80,9 +89,7 @@ export default function AutocompleteInput({
           placeholder={placeholder}
           disabled={disabled}
           className={`w-full px-4 py-3 text-sm border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
-            error 
-              ? 'border-red-500 dark:border-red-400' 
-              : 'border-gray-300 dark:border-gray-600'
+            error ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600'
           }`}
         />
         {showSuggestions && suggestions.length > 0 && (
@@ -100,9 +107,7 @@ export default function AutocompleteInput({
           </div>
         )}
       </div>
-      {error && (
-        <p className="mt-1 text-sm text-red-500 dark:text-red-400">{error}</p>
-      )}
+      {error && <p className="mt-1 text-sm text-red-500 dark:text-red-400">{error}</p>}
     </div>
   );
 }
