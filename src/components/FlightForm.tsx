@@ -66,14 +66,14 @@ export default function FlightForm({ onSubmit, onCancel, isSubmitting = false }:
 
   // Validation for each step
   const canProceedStep1 =
-    !errors.flightNumber && !errors.airline && formData.flightNumber && formData.airline;
+    !errors.flightNumber && !errors.airline && !!formData.flightNumber && !!formData.airline;
 
   const canProceedStep2 =
-    !errors.origin && !errors.destination && formData.origin && formData.destination;
+    !errors.origin && !errors.destination && !!formData.origin && !!formData.destination;
 
-  const canProceedStep3 = !errors.eta && !errors.etd && etaTime && etdTime;
+  const canProceedStep3 = !errors.eta && !errors.etd && !!etaTime && !!etdTime;
 
-  const canProceed =
+  const canProceed: boolean =
     currentStep === 1 ? canProceedStep1 : currentStep === 2 ? canProceedStep2 : canProceedStep3;
 
   // Reset wizard when form is reset
