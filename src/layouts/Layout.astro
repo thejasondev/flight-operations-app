@@ -3,185 +3,188 @@ import '../styles/global.css';
 import Footer from '../components/Footer.tsx';
 
 interface Props {
-	title: string;
-	description?: string;
-	keywords?: string;
-	image?: string;
-	url?: string;
+  title: string;
+  description?: string;
+  keywords?: string;
+  image?: string;
+  url?: string;
 }
 
 const {
-	title = "Panel de Operaciones Aéreas",
-	description = "Sistema profesional de gestión de operaciones aéreas para coordinadores de vuelo en tiempo real.",
-	keywords = "operaciones aéreas, gestión de vuelos, coordinación aeroportuaria, aerolíneas, seguimiento de vuelos, VRA, Vuelos en tiempo real, Panel OPS, Panel de Operaciones Aéreas, Aerolíneas, Aeropuertos",
-	image = "/logo/logo-ops.png",
-	url = Astro.url
+  title = 'Panel de Operaciones Aéreas',
+  description = 'Sistema profesional de gestión de operaciones aéreas para coordinadores de vuelo en tiempo real.',
+  keywords = 'operaciones aéreas, gestión de vuelos, coordinación aeroportuaria, aerolíneas, seguimiento de vuelos, VRA, Vuelos en tiempo real, Panel OPS, Panel de Operaciones Aéreas, Aerolíneas, Aeropuertos',
+  image = '/logo/logo-ops.png',
+  url = Astro.url,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const siteName = "Panel Operaciones Aéreas";
+const siteName = 'Panel Operaciones Aéreas';
 ---
+
 <!doctype html>
 <html lang="es">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content={description} />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		
-		<!-- Canonical URL -->
-		<link rel="canonical" href={canonicalURL} />
-		
-		<!-- Favicon and Icons - Optimized -->
-		<link rel="icon" type="image/x-icon" href="/logo/favicon.ico" />
-		<link rel="icon" type="image/png" sizes="96x96" href="/logo/favicon-96x96.png" />
-		<link rel="icon" type="image/svg+xml" href="/logo/favicon.svg" />
-		
-		<!-- Apple Touch Icon -->
-		<link rel="apple-touch-icon" sizes="180x180" href="/logo/apple-touch-icon.png" />
-		
-		<!-- Android Chrome Icons -->
-		<link rel="icon" type="image/png" sizes="192x192" href="/logo/web-app-manifest-192x192.png" />
-		<link rel="icon" type="image/png" sizes="512x512" href="/logo/web-app-manifest-512x512.png" />
-		
-		<!-- Web App Manifest -->
-		<link rel="manifest" href="/site.webmanifest" />
-		
-		<!-- Title -->
-		<title>{title}</title>
-		
-		<meta name="keywords" content={keywords} />
-		<meta name="author" content="Jason Guerra" />
-		<meta name="robots" content="index, follow" />
-		<meta name="language" content="Spanish" />
-		<meta name="revisit-after" content="7 days" />
-		<meta name="google-site-verification" content="A7BT_C6ClgkaWHA9brgG3v0v7gG-1NeclQ6jCfvQF8U" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-		<!-- Open Graph / Facebook -->
-		<meta property="og:type" content="website" />
-		<meta property="og:url" content={url} />
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
-		<meta property="og:image" content={new URL("/logo/logo-ops.png", Astro.url)} />
-		<meta property="og:image:width" content="512" />
-		<meta property="og:image:height" content="512" />
-		<meta property="og:image:type" content="image/png" />
-		<meta property="og:site_name" content={siteName} />
-		<meta property="og:locale" content="es_ES" />
-		
-		<!-- Twitter Card -->
-		<meta property="twitter:card" content="summary" />
-		<meta property="twitter:url" content={url} />
-		<meta property="twitter:title" content={title} />
-		<meta property="twitter:description" content={description} />
-		<meta property="twitter:image" content={new URL("/logo/logo-ops.png", Astro.url)} />
-		<meta property="twitter:image:alt" content="Panel Operaciones Aéreas Logo" />
-		
-		<!-- Mobile and PWA -->
-		<meta name="theme-color" content="#3b82f6" />
-		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="mobile-web-app-capable" content="yes" />
-		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-		<meta name="apple-mobile-web-app-title" content={siteName} />
-		<meta name="application-name" content={siteName} />
-		
-		<!-- Preconnect for performance -->
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		
-		<!-- JSON-LD Structured Data -->
-		<script type="application/ld+json" set:html={JSON.stringify({
-			"@context": "https://schema.org",
-			"@type": "WebApplication",
-			"name": "Panel Operaciones Aéreas",
-			"description": "Sistema profesional de gestión de operaciones aéreas para coordinadores de vuelo en tiempo real.",
-			"url": url,
-			"applicationCategory": "BusinessApplication",
-			"operatingSystem": "Web Browser",
-			"offers": {
-				"@type": "Offer",
-				"price": "0",
-				"priceCurrency": "USD"
-			},
-			"author": {
-				"@type": "Person",
-				"name": "Jason Guerra"
-			},
-			"featureList": [
-				"Gestión de vuelos en tiempo real",
-				"Seguimiento de operaciones aéreas",
-				"Generación de reportes",
-				"Interfaz móvil optimizada",
-				"Soporte para múltiples aerolíneas"
-			]
-		})}></script>
-		
-		<!-- Global Styles -->
-		<style>
-			html,
-			body {
-				margin: 0;
-				width: 100%;
-				height: 100%;
-			}
-		</style>
-	</head>
-	<body class="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
-		<main class="flex-1 pb-4 lg:pb-8">
-			<slot />
-		</main>
-		<Footer client:load />
-		
-		<!-- Theme management script -->
-		<script>
-			// Check for dark mode preference
-			const theme = (() => {
-				if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-					return localStorage.getItem('theme');
-				}
-				return 'light';
-			})();
-			
-			if (theme === 'dark') {
-				document.documentElement.classList.add('dark');
-			} else {
-				document.documentElement.classList.remove('dark');
-			}
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalURL} />
 
-			if (typeof localStorage !== 'undefined') {
-				localStorage.setItem('theme', theme || 'light');
-			}
+    <!-- Favicon and Icons - Optimized -->
+    <link rel="icon" type="image/x-icon" href="/logo/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/logo/favicon-96x96.png" />
+    <link rel="icon" type="image/svg+xml" href="/logo/favicon.svg" />
 
-			// Global theme toggle function
-			window.toggleTheme = function() {
-				const currentTheme = localStorage.getItem('theme') || 'light';
-				const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-				
-				localStorage.setItem('theme', newTheme);
-				
-				if (newTheme === 'dark') {
-					document.documentElement.classList.add('dark');
-				} else {
-					document.documentElement.classList.remove('dark');
-				}
-				
-				return newTheme;
-			}
-		</script>
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/logo/apple-touch-icon.png" />
 
-		<!-- Service Worker Registration -->
-		<script>
-			if ('serviceWorker' in navigator) {
-				window.addEventListener('load', () => {
-					const isLocalhost = ['localhost', '127.0.0.1', '::1'].includes(location.hostname);
-					if (isLocalhost || location.protocol === 'https:') {
-						navigator.serviceWorker
-							.register('/service-worker.js')
-							.catch((error) => {
-								console.error('Service worker registration failed:', error);
-							});
-					}
-				});
-			}
-		</script>
-	</body>
+    <!-- Android Chrome Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="/logo/web-app-manifest-192x192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/logo/web-app-manifest-512x512.png" />
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Title -->
+    <title>{title}</title>
+
+    <meta name="keywords" content={keywords} />
+    <meta name="author" content="Jason Guerra" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="Spanish" />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="google-site-verification" content="A7BT_C6ClgkaWHA9brgG3v0v7gG-1NeclQ6jCfvQF8U" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL('/logo/logo-ops.png', Astro.site)} />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content="es_ES" />
+
+    <!-- Twitter Card -->
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={new URL('/logo/logo-ops.png', Astro.site)} />
+    <meta property="twitter:image:alt" content="Panel Operaciones Aéreas Logo" />
+
+    <!-- Mobile and PWA -->
+    <meta name="theme-color" content="#3b82f6" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content={siteName} />
+    <meta name="application-name" content={siteName} />
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- JSON-LD Structured Data -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebApplication',
+        name: 'Panel Operaciones Aéreas',
+        description:
+          'Sistema profesional de gestión de operaciones aéreas para coordinadores de vuelo en tiempo real.',
+        url: canonicalURL,
+        applicationCategory: 'BusinessApplication',
+        operatingSystem: 'Web Browser',
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'USD',
+        },
+        author: {
+          '@type': 'Person',
+          name: 'Jason Guerra',
+        },
+        featureList: [
+          'Gestión de vuelos en tiempo real',
+          'Seguimiento de operaciones aéreas',
+          'Generación de reportes',
+          'Interfaz móvil optimizada',
+          'Soporte para múltiples aerolíneas',
+        ],
+      })}
+    />
+
+    <!-- Global Styles -->
+    <style>
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
+    <main class="flex-1 pb-4 lg:pb-8">
+      <slot />
+    </main>
+    <Footer client:load />
+
+    <!-- Theme management script -->
+    <script>
+      // Check for dark mode preference
+      const theme = (() => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+          return localStorage.getItem('theme');
+        }
+        return 'light';
+      })();
+
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('theme', theme || 'light');
+      }
+
+      // Global theme toggle function
+      window.toggleTheme = function () {
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+        localStorage.setItem('theme', newTheme);
+
+        if (newTheme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+
+        return newTheme;
+      };
+    </script>
+
+    <!-- Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          const isLocalhost = ['localhost', '127.0.0.1', '::1'].includes(location.hostname);
+          if (isLocalhost || location.protocol === 'https:') {
+            navigator.serviceWorker.register('/service-worker.js').catch((error) => {
+              console.error('Service worker registration failed:', error);
+            });
+          }
+        });
+      }
+    </script>
+  </body>
 </html>

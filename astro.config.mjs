@@ -1,33 +1,30 @@
 // @ts-check
-import { defineConfig } from "astro/config";
-import react from "@astrojs/react";
-import tailwind from "@astrojs/tailwind";
+import { defineConfig } from 'astro/config';
+import react from '@astrojs/react';
+import tailwind from '@astrojs/tailwind';
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://vra-ops-app.vercel.app",
-  integrations: [
-    react(), 
-    tailwind()
-  ],
-  output: "static",
+  site: 'https://vraops.vercel.app',
+  integrations: [react(), tailwind()],
+  output: 'static',
   adapter: undefined,
   build: {
-    inlineStylesheets: "never",
+    inlineStylesheets: 'never',
   },
   vite: {
     build: {
       cssMinify: true,
-      minify: "terser",
+      minify: 'terser',
       rollupOptions: {
         output: {
           manualChunks: {
             vendor: ['react', 'react-dom'],
-            utils: ['date-fns']
-          }
-        }
-      }
-    }
+            utils: ['date-fns'],
+          },
+        },
+      },
+    },
   },
-  compressHTML: true
+  compressHTML: true,
 });
