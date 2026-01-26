@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import type { Flight } from "./FlightCard";
-import { useReport } from "../hooks/useReport";
-import ReportHeader from "./report/ReportHeader";
-import ReportTitle from "./report/ReportTitle";
-import FlightInfoSection from "./report/FlightInfoSection";
-import TPTSection from "./report/TPTSection";
-import OperationsSection from "./report/OperationsSection";
-import NotesSection from "./report/NotesSection";
-import ReportFooter from "./report/ReportFooter";
-import PrintPreview from "./PrintPreview";
-import "../styles/reportStyles.css";
+import React, { useState } from 'react';
+import type { Flight } from './FlightCard';
+import { useReport } from '../hooks/useReport';
+import ReportHeader from './report/ReportHeader';
+import ReportTitle from './report/ReportTitle';
+import FlightInfoSection from './report/FlightInfoSection';
+import TPTSection from './report/TPTSection';
+import OperationsSection from './report/OperationsSection';
+import NotesSection from './report/NotesSection';
+import ReportFooter from './report/ReportFooter';
+import PrintPreview from './PrintPreview';
+import '../styles/reportStyles.css';
 
 interface ReportProps {
   flight: Flight;
@@ -17,7 +17,15 @@ interface ReportProps {
 }
 
 export default function Report({ flight, onClose }: ReportProps) {
-  const { modalRef, scrollContainerRef, handlePrint, handleKeyDown, handleWheel } = useReport({ onClose });
+  const {
+    modalRef,
+    scrollContainerRef,
+    handlePrint,
+    handleDownload,
+    isDownloading,
+    handleKeyDown,
+    handleWheel,
+  } = useReport({ onClose });
   const [isPreviewMode, setIsPreviewMode] = useState(false);
 
   const handleTogglePreview = () => {
@@ -49,15 +57,13 @@ export default function Report({ flight, onClose }: ReportProps) {
   if (isPreviewMode) {
     return (
       <PrintPreview isPreviewMode={isPreviewMode} onTogglePreview={handleTogglePreview}>
-        <div className="print-content">
-          {reportContent}
-        </div>
+        <div className="print-content">{reportContent}</div>
       </PrintPreview>
     );
   }
 
   return (
-    <div 
+    <div
       ref={modalRef}
       className="fixed inset-0 bg-black bg-opacity-50 z-50 print:static print:bg-transparent print:inset-auto"
       onClick={(e) => e.target === e.currentTarget && onClose()}
@@ -68,20 +74,22 @@ export default function Report({ flight, onClose }: ReportProps) {
       aria-modal="true"
       aria-labelledby="report-title"
     >
-      <div 
+      <div
         ref={scrollContainerRef}
         className="h-full w-full overflow-y-auto overflow-x-hidden print:overflow-visible print:h-auto report-scroll-container"
       >
         <div className="min-h-full flex items-start justify-center p-2 sm:p-4 print:p-0 print:min-h-0">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-3 sm:p-6 lg:p-8 max-w-4xl w-full my-4 print:my-0 print:shadow-none print:p-0 print:max-w-none print:rounded-none">
-            
             {/* Header - Mobile Optimized */}
-            <ReportHeader onPrint={handlePrint} onClose={onClose} />
+            <ReportHeader
+              onPrint={handlePrint}
+              onDownload={handleDownload}
+              isDownloading={isDownloading}
+              onClose={onClose}
+            />
 
             {/* Printable Report Content */}
-            <div className="print-content print:text-black print:bg-white">
-              {reportContent}
-            </div>
+            <div className="print-content print:text-black print:bg-white">{reportContent}</div>
           </div>
         </div>
       </div>
