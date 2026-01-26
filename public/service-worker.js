@@ -1,7 +1,7 @@
 // Service Worker para Panel Operaciones Aéreas
 // Proporciona caché básico offline del shell de la app y recursos estáticos
 
-const CACHE_VERSION = 'vra-ops-cache-v1';
+const CACHE_VERSION = 'cub-ops-cache-v1';
 const APP_SHELL = [
   '/',
   '/offline',

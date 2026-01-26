@@ -1,6 +1,6 @@
 {
   "name": "Panel Operaciones Aéreas",
-  "short_name": "VRA OPS",
+  "short_name": "CUB OPS",
   "description": "Sistema profesional de gestión de operaciones aéreas para coordinadores de vuelo en tiempo real.",
   "start_url": "/",
   "display": "standalone",
