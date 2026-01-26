@@ -49,7 +49,7 @@ export const useReport = ({ onClose }: UseReportProps) => {
     const printStyleElement = applyPrintStyles();
 
     // Select the content to print (the inner white box)
-    const element = scrollContainerRef.current.querySelector('.bg-white');
+    const element = scrollContainerRef.current.querySelector('.print-content');
 
     if (!element) return;
 
