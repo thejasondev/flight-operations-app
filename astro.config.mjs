@@ -5,7 +5,7 @@ import tailwind from '@astrojs/tailwind';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://vraops.vercel.app',
+  site: 'https://cub-ops.vercel.app',
   integrations: [react(), tailwind()],
   output: 'static',
   adapter: undefined,

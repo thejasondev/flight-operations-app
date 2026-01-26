@@ -18,7 +18,7 @@ const Footer: React.FC = () => {
               <div className="font-semibold text-gray-900 dark:text-white">
                 Panel Operaciones Aéreas
               </div>
-              <div className="text-gray-500 dark:text-gray-400 text-xs">VRA OPS</div>
+              <div className="text-gray-500 dark:text-gray-400 text-xs">CubOps</div>
             </div>
           </div>
 

@@ -112,7 +112,7 @@ export default function RouteConfiguration({
         label={isDoubleDestination ? 'Primer Destino' : 'Destino'}
         value={routeData.destination}
         onChange={(value) => onRouteChange('destination', value)}
-        placeholder="ej: VRA"
+        placeholder="ej: HAV"
         suggestions={suggestions.destination}
         showSuggestions={showSuggestions.destination}
         onSuggestionSelect={(value) => handleSuggestionSelect('destination', value)}

@@ -23,17 +23,21 @@ export const useReport = ({ onClose }: UseReportProps) => {
 
     const printStyleElement = applyPrintStyles();
 
-    // Print and cleanup
-    window.print();
-
-    // Remove print styles after printing
+    // Slight delay to ensure styles are applied before print dialog opens
+    // This fixes the issue on mobile where the first print attempts to print the full page
     setTimeout(() => {
-      removePrintStyles(printStyleElement);
-      // Restore dark mode if it was active
-      if (wasDark) {
-        document.documentElement.classList.add('dark');
-      }
-    }, REPORT_CONFIG.PRINT_CLEANUP_DELAY);
+      // Print
+      window.print();
+
+      // Remove print styles after printing (with a delay to ensure print dialog captured it)
+      setTimeout(() => {
+        removePrintStyles(printStyleElement);
+        // Restore dark mode if it was active
+        if (wasDark) {
+          document.documentElement.classList.add('dark');
+        }
+      }, REPORT_CONFIG.PRINT_CLEANUP_DELAY);
+    }, 500);
   };
 
   /**
