@@ -79,12 +79,12 @@ export const useReport = ({ onClose }: UseReportProps) => {
       if (isShareSupported) {
         // Generate blob for sharing
         const blob = await html2pdf()
-          .set(opt)
+          .set(opt as any)
           .from(element as HTMLElement)
           .output('blob');
         const file = new File([blob], opt.filename, { type: 'application/pdf' });
 
-        if (navigator.canShare({ files: [file] })) {
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({
             files: [file],
             title: 'Reporte de Operaciones',
@@ -93,14 +93,14 @@ export const useReport = ({ onClose }: UseReportProps) => {
         } else {
           // Fallback to save if file sharing not supported
           await html2pdf()
-            .set(opt)
+            .set(opt as any)
             .from(element as HTMLElement)
             .save();
         }
       } else {
         // Direct download
         await html2pdf()
-          .set(opt)
+          .set(opt as any)
           .from(element as HTMLElement)
           .save();
       }
@@ -109,7 +109,7 @@ export const useReport = ({ onClose }: UseReportProps) => {
       // Fallback to simple download on error or cancellation
       try {
         await html2pdf()
-          .set(opt)
+          .set(opt as any)
           .from(element as HTMLElement)
           .save();
       } catch (e) {

@@ -46,7 +46,7 @@ export const parseDateInput = (input: string, type: 'date' | 'time' | 'datetime'
 export const extractTimeFromDate = (date: Date): TimeState => {
   return {
     hours: format(date, 'HH'),
-    minutes: format(date, 'mm')
+    minutes: format(date, 'mm'),
   };
 };
 
@@ -54,11 +54,11 @@ export const extractTimeFromDate = (date: Date): TimeState => {
  * Get current time as TimeState (HH:mm)
  */
 export const getCurrentTimeState = (): TimeState => {
-	const now = new Date();
-	return {
-		hours: format(now, 'HH'),
-		minutes: format(now, 'mm')
-	};
+  const now = new Date();
+  return {
+    hours: format(now, 'HH'),
+    minutes: format(now, 'mm'),
+  };
 };
 
 /**
@@ -76,53 +76,49 @@ export const createDateWithTime = (date: Date, timeState: TimeState): Date => {
 export const generateCalendarDays = (currentMonth: Date): Date[] => {
   const year = currentMonth.getFullYear();
   const month = currentMonth.getMonth();
-  
+
   const firstDay = new Date(year, month, 1);
-  const lastDay = new Date(year, month + 1, 0);
+
   const startDate = new Date(firstDay);
   startDate.setDate(startDate.getDate() - firstDay.getDay());
-  
+
   const days = [];
   const currentDate = new Date(startDate);
-  
+
   for (let i = 0; i < 42; i++) {
     days.push(new Date(currentDate));
     currentDate.setDate(currentDate.getDate() + 1);
   }
-  
+
   return days;
 };
 
 /**
  * Check if date is disabled based on constraints
  */
-export const isDateDisabled = (
-  day: Date, 
-  minDate?: Date, 
-  maxDate?: Date
-): boolean => {
+export const isDateDisabled = (day: Date, minDate?: Date, maxDate?: Date): boolean => {
   const dayWithoutTime = new Date(day.getFullYear(), day.getMonth(), day.getDate());
-  const minDateWithoutTime = minDate ? new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate()) : null;
-  const maxDateWithoutTime = maxDate ? new Date(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate()) : null;
-  
+  const minDateWithoutTime = minDate
+    ? new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate())
+    : null;
+  const maxDateWithoutTime = maxDate
+    ? new Date(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate())
+    : null;
+
   return Boolean(
-    (minDateWithoutTime && dayWithoutTime < minDateWithoutTime) || 
-    (maxDateWithoutTime && dayWithoutTime > maxDateWithoutTime)
+    (minDateWithoutTime && dayWithoutTime < minDateWithoutTime) ||
+      (maxDateWithoutTime && dayWithoutTime > maxDateWithoutTime)
   );
 };
 
 /**
  * Get date status for styling
  */
-export const getDateStatus = (
-  day: Date,
-  selectedDate: Date | null,
-  currentMonth: Date
-) => {
+export const getDateStatus = (day: Date, selectedDate: Date | null, currentMonth: Date) => {
   const isCurrentMonth = day.getMonth() === currentMonth.getMonth();
   const isSelected = Boolean(selectedDate && day.toDateString() === selectedDate.toDateString());
   const isToday = day.toDateString() === new Date().toDateString();
-  
+
   return { isCurrentMonth, isSelected, isToday };
 };
 
@@ -145,11 +141,7 @@ export const constrainTimeValue = (value: number, min: number, max: number): num
 /**
  * Increment/decrement time with wrapping
  */
-export const adjustTimeValue = (
-  current: number, 
-  increment: number, 
-  max: number
-): string => {
+export const adjustTimeValue = (current: number, increment: number, max: number): string => {
   const adjusted = (current + increment + max + 1) % (max + 1);
   return adjusted.toString().padStart(2, '0');
 };

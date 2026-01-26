@@ -4,12 +4,12 @@
  */
 
 export interface TPTData {
-  eta: string;           // Estimated Time of Arrival
-  etd: string;           // Estimated Time of Departure
-  ata?: string;          // Actual Time of Arrival
-  atd?: string;          // Actual Time of Departure
-  tptMinutes: number;    // TPT en minutos
-  tptFormatted: string;  // TPT formateado (ej: "2h 30m")
+  eta: string; // Estimated Time of Arrival
+  etd: string; // Estimated Time of Departure
+  ata?: string; // Actual Time of Arrival
+  atd?: string; // Actual Time of Departure
+  tptMinutes: number; // TPT en minutos
+  tptFormatted: string; // TPT formateado (ej: "2h 30m")
 }
 
 export interface DelayInfo {
@@ -69,10 +69,10 @@ export function minutesToTime(minutes: number): string {
  */
 export function formatDuration(minutes: number): string {
   if (minutes < 0) return '0m';
-  
+
   const hours = Math.floor(minutes / 60);
   const mins = minutes % 60;
-  
+
   if (hours === 0) {
     return `${mins}m`;
   } else if (mins === 0) {
@@ -88,8 +88,7 @@ export function formatDuration(minutes: number): string {
  */
 export function analyzeTimeDelay(
   estimatedTime: string,
-  actualTime: string,
-  type: 'arrival' | 'departure'
+  actualTime: string
 ): { minutes: number; status: 'on-time' | 'early' | 'delayed'; formatted: string } {
   // Validación de entrada
   if (!estimatedTime || !actualTime) {
@@ -98,19 +97,19 @@ export function analyzeTimeDelay(
 
   const estimatedMinutes = timeToMinutes(estimatedTime);
   const actualMinutes = timeToMinutes(actualTime);
-  
+
   let delayMinutes = actualMinutes - estimatedMinutes;
-  
+
   // Manejar cruce de medianoche
   if (delayMinutes < -12 * 60) {
     delayMinutes += 24 * 60;
   } else if (delayMinutes > 12 * 60) {
     delayMinutes -= 24 * 60;
   }
-  
+
   let status: 'on-time' | 'early' | 'delayed';
   let formatted: string;
-  
+
   // Análisis exacto basado en desfasaje real
   if (delayMinutes === 0) {
     // Exactamente puntual
@@ -125,7 +124,7 @@ export function analyzeTimeDelay(
     status = 'delayed';
     formatted = `Retrasado ${formatDuration(delayMinutes)}`;
   }
-  
+
   return { minutes: delayMinutes, status, formatted };
 }
 
@@ -133,28 +132,35 @@ export function analyzeTimeDelay(
  * Obtiene el nivel de criticidad basado en el impacto operacional
  * Solo los retrasos se consideran problemáticos
  */
-export function getDelayCriticality(delayMinutes: number, type: 'arrival' | 'departure'): {
+export function getDelayCriticality(
+  delayMinutes: number,
+  type: 'arrival' | 'departure'
+): {
   level: 'low' | 'medium' | 'high' | 'critical';
   description: string;
 } {
   // Si es adelantado o puntual, siempre es operación normal
   if (delayMinutes <= 0) {
-    return { 
-      level: 'low', 
-      description: delayMinutes === 0 ? 'Operación puntual' : 'Operación adelantada - Excelente' 
+    return {
+      level: 'low',
+      description: delayMinutes === 0 ? 'Operación puntual' : 'Operación adelantada - Excelente',
     };
   }
-  
+
   // Solo evaluar criticidad en caso de retrasos (delayMinutes > 0)
   if (type === 'arrival') {
     if (delayMinutes <= 15) return { level: 'low', description: 'Retraso menor - Monitorear' };
-    if (delayMinutes <= 30) return { level: 'medium', description: 'Retraso moderado - Atención requerida' };
-    if (delayMinutes <= 60) return { level: 'high', description: 'Retraso significativo - Acción inmediata' };
+    if (delayMinutes <= 30)
+      return { level: 'medium', description: 'Retraso moderado - Atención requerida' };
+    if (delayMinutes <= 60)
+      return { level: 'high', description: 'Retraso significativo - Acción inmediata' };
     return { level: 'critical', description: 'Retraso crítico - Investigación urgente' };
   } else {
     if (delayMinutes <= 5) return { level: 'low', description: 'Retraso menor - Monitorear' };
-    if (delayMinutes <= 15) return { level: 'medium', description: 'Retraso moderado - Atención requerida' };
-    if (delayMinutes <= 30) return { level: 'high', description: 'Retraso significativo - Acción inmediata' };
+    if (delayMinutes <= 15)
+      return { level: 'medium', description: 'Retraso moderado - Atención requerida' };
+    if (delayMinutes <= 30)
+      return { level: 'high', description: 'Retraso significativo - Acción inmediata' };
     return { level: 'critical', description: 'Retraso crítico - Investigación urgente' };
   }
 }
@@ -170,37 +176,37 @@ export function analyzeFlightDelays(
 ): FlightDelayAnalysis | undefined {
   // Necesitamos al menos ATA para hacer análisis
   if (!ata) return undefined;
-  
+
   // Análisis de llegada con criticidad
-  const arrivalAnalysis = analyzeTimeDelay(eta, ata, 'arrival');
+  const arrivalAnalysis = analyzeTimeDelay(eta, ata);
   const arrivalCriticality = getDelayCriticality(arrivalAnalysis.minutes, 'arrival');
-  
+
   const arrivalDelay: DelayInfo = {
     ...arrivalAnalysis,
-    criticality: arrivalCriticality
+    criticality: arrivalCriticality,
   };
-  
+
   // Análisis de salida con criticidad
   let departureDelay: DelayInfo = {
     minutes: 0,
     status: 'on-time',
-    formatted: 'Pendiente'
+    formatted: 'Pendiente',
   };
-  
+
   if (atd) {
-    const departureAnalysis = analyzeTimeDelay(etd, atd, 'departure');
+    const departureAnalysis = analyzeTimeDelay(etd, atd);
     const departureCriticality = getDelayCriticality(departureAnalysis.minutes, 'departure');
-    
+
     departureDelay = {
       ...departureAnalysis,
-      criticality: departureCriticality
+      criticality: departureCriticality,
     };
   }
-  
+
   // Determinar estado general con lógica mejorada
   let overallStatus: 'on-time' | 'early' | 'delayed';
   let overallFormatted: string;
-  
+
   if (atd) {
     // Si tenemos ATD, el estado general se basa en la salida (más crítico)
     overallStatus = departureDelay.status;
@@ -208,7 +214,7 @@ export function analyzeFlightDelays(
   } else {
     // Si solo tenemos ATA, el estado se basa en la llegada
     overallStatus = arrivalDelay.status;
-    
+
     // Proyección inteligente para salida basada en llegada
     const projectedDepartureDelay = arrivalDelay.minutes;
     if (projectedDepartureDelay > 15) {
@@ -219,15 +225,15 @@ export function analyzeFlightDelays(
       overallFormatted = arrivalDelay.formatted;
     }
   }
-  
+
   // Calcular resumen e impacto general - Solo retrasos son problemáticos
   const arrivalDelayActual = Math.max(0, arrivalDelay.minutes); // Solo retrasos positivos
   const departureDelayActual = atd ? Math.max(0, departureDelay.minutes) : 0;
   const totalDelayMinutes = Math.max(arrivalDelayActual, departureDelayActual);
-  
+
   let impactLevel: 'minimal' | 'moderate' | 'significant' | 'severe';
   let recommendation: string;
-  
+
   // Evaluar impacto solo basado en retrasos reales
   if (totalDelayMinutes === 0) {
     impactLevel = 'minimal';
@@ -245,7 +251,7 @@ export function analyzeFlightDelays(
     impactLevel = 'severe';
     recommendation = 'Retraso crítico - Investigación urgente y medidas correctivas';
   }
-  
+
   return {
     arrivalDelay,
     departureDelay,
@@ -254,8 +260,8 @@ export function analyzeFlightDelays(
     summary: {
       totalDelayMinutes,
       impactLevel,
-      recommendation
-    }
+      recommendation,
+    },
   };
 }
 
@@ -265,22 +271,22 @@ export function analyzeFlightDelays(
 export function calculateTPT(eta: string, etd: string): TPTData {
   const etaMinutes = timeToMinutes(eta);
   const etdMinutes = timeToMinutes(etd);
-  
+
   let tptMinutes = etdMinutes - etaMinutes;
-  
+
   // Manejar caso de vuelo que cruza medianoche
   if (tptMinutes < 0) {
     tptMinutes += 24 * 60; // Agregar 24 horas
   }
-  
+
   // TPT mínimo de 30 minutos, máximo de 8 horas
   tptMinutes = Math.max(30, Math.min(tptMinutes, 8 * 60));
-  
+
   return {
     eta,
     etd,
     tptMinutes,
-    tptFormatted: formatDuration(tptMinutes)
+    tptFormatted: formatDuration(tptMinutes),
   };
 }
 
@@ -295,7 +301,7 @@ export function calculateTPTStatus(
 ): TPTStatus {
   const now = currentTime || new Date();
   const currentMinutes = now.getHours() * 60 + now.getMinutes();
-  
+
   // Realizar análisis detallado de retrasos si hay datos disponibles
   const delayAnalysis = analyzeFlightDelays(
     tptData.eta,
@@ -303,7 +309,7 @@ export function calculateTPTStatus(
     actualArrivalTime,
     actualDepartureTime
   );
-  
+
   // Si no hay tiempo real de arribo, estamos esperando
   if (!actualArrivalTime) {
     return {
@@ -314,22 +320,22 @@ export function calculateTPTStatus(
       delayMinutes: 0,
       delayStatus: 'on-time',
       delayFormatted: 'A tiempo',
-      delayAnalysis
+      delayAnalysis,
     };
   }
-  
+
   const actualArrivalMinutes = timeToMinutes(actualArrivalTime);
-  
+
   // Si ya salió, calcular el análisis final
   if (actualDepartureTime) {
     const actualDepartureMinutes = timeToMinutes(actualDepartureTime);
     const etdMinutes = timeToMinutes(tptData.etd);
     const delayMinutes = actualDepartureMinutes - etdMinutes;
-    
+
     // Usar el análisis detallado para el estado general
     const delayStatus = delayAnalysis?.overallStatus || 'on-time';
     const delayFormatted = delayAnalysis?.overallFormatted || 'A tiempo';
-    
+
     return {
       phase: 'completed',
       remainingMinutes: 0,
@@ -338,23 +344,23 @@ export function calculateTPTStatus(
       delayMinutes,
       delayStatus,
       delayFormatted,
-      delayAnalysis
+      delayAnalysis,
     };
   }
-  
+
   // TPT activo - calculando tiempo restante
   const elapsedMinutes = currentMinutes - actualArrivalMinutes;
   const remainingMinutes = Math.max(0, tptData.tptMinutes - elapsedMinutes);
   const progressPercentage = Math.min(100, (elapsedMinutes / tptData.tptMinutes) * 100);
-  
+
   // Determinar si está retrasado basado en proyección
   const etdMinutes = timeToMinutes(tptData.etd);
   const projectedDepartureMinutes = actualArrivalMinutes + tptData.tptMinutes;
   const delayMinutes = projectedDepartureMinutes - etdMinutes;
-  
+
   let delayStatus: 'on-time' | 'early' | 'delayed';
   let delayFormatted: string;
-  
+
   if (delayMinutes <= -5) {
     delayStatus = 'early';
     delayFormatted = `Adelantado ${formatDuration(Math.abs(delayMinutes))}`;
@@ -365,9 +371,9 @@ export function calculateTPTStatus(
     delayStatus = 'on-time';
     delayFormatted = 'A tiempo';
   }
-  
+
   const phase = remainingMinutes === 0 ? 'overdue' : 'active';
-  
+
   return {
     phase,
     remainingMinutes,
@@ -376,7 +382,7 @@ export function calculateTPTStatus(
     delayMinutes,
     delayStatus,
     delayFormatted,
-    delayAnalysis
+    delayAnalysis,
   };
 }
 
@@ -393,19 +399,19 @@ export function getDelayStatusColor(status: 'on-time' | 'early' | 'delayed'): {
       return {
         bg: 'bg-green-50 dark:bg-green-900/20',
         text: 'text-green-700 dark:text-green-300',
-        border: 'border-green-200 dark:border-green-700'
+        border: 'border-green-200 dark:border-green-700',
       };
     case 'delayed':
       return {
         bg: 'bg-red-50 dark:bg-red-900/20',
         text: 'text-red-700 dark:text-red-300',
-        border: 'border-red-200 dark:border-red-700'
+        border: 'border-red-200 dark:border-red-700',
       };
     default:
       return {
         bg: 'bg-blue-50 dark:bg-blue-900/20',
         text: 'text-blue-700 dark:text-blue-300',
-        border: 'border-blue-200 dark:border-blue-700'
+        border: 'border-blue-200 dark:border-blue-700',
       };
   }
 }

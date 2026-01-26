@@ -126,7 +126,7 @@ export default function BottomMenu({
           <div className="flex-1 flex flex-col items-center justify-center gap-1 p-2">
             <ThemeToggle />
             <span className="text-[10px] font-medium text-gray-500 dark:text-gray-400 mt-1">
-              Tema
+              Modo
             </span>
           </div>
         </div>

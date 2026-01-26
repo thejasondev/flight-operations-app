@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import type { Flight } from '../components/FlightCard';
 
 interface ReportState {
   flightId: string;
@@ -10,9 +9,17 @@ interface ReportState {
 
 interface UseReportPersistenceReturn {
   getReportState: (flightId: string) => ReportState | null;
-  saveReportState: (flightId: string, operations: Record<string, { start: string; end: string }>, notes: string) => void;
+  saveReportState: (
+    flightId: string,
+    operations: Record<string, { start: string; end: string }>,
+    notes: string
+  ) => void;
   clearReportState: (flightId: string) => void;
-  hasUnsavedChanges: (flightId: string, currentOperations: Record<string, { start: string; end: string }>, currentNotes: string) => boolean;
+  hasUnsavedChanges: (
+    flightId: string,
+    currentOperations: Record<string, { start: string; end: string }>,
+    currentNotes: string
+  ) => boolean;
 }
 
 const STORAGE_KEY = 'flightReportStates';
@@ -28,7 +35,7 @@ export function useReportPersistence(): UseReportPersistenceReturn {
       if (savedStates) {
         const parsedStates = JSON.parse(savedStates);
         const now = Date.now();
-        
+
         // Filter out expired states
         const validStates: Record<string, ReportState> = {};
         Object.entries(parsedStates).forEach(([flightId, state]) => {
@@ -37,9 +44,9 @@ export function useReportPersistence(): UseReportPersistenceReturn {
             validStates[flightId] = reportState;
           }
         });
-        
+
         setReportStates(validStates);
-        
+
         // Save cleaned states back to localStorage
         localStorage.setItem(STORAGE_KEY, JSON.stringify(validStates));
       }
@@ -60,37 +67,37 @@ export function useReportPersistence(): UseReportPersistenceReturn {
   const getReportState = (flightId: string): ReportState | null => {
     const state = reportStates[flightId];
     if (!state) return null;
-    
+
     // Check if state is expired
     const now = Date.now();
     if (now - state.lastUpdated > EXPIRY_TIME) {
       clearReportState(flightId);
       return null;
     }
-    
+
     return state;
   };
 
   const saveReportState = (
-    flightId: string, 
-    operations: Record<string, { start: string; end: string }>, 
+    flightId: string,
+    operations: Record<string, { start: string; end: string }>,
     notes: string
   ) => {
     const newState: ReportState = {
       flightId,
       operations: { ...operations },
       notes,
-      lastUpdated: Date.now()
+      lastUpdated: Date.now(),
     };
 
-    setReportStates(prev => ({
+    setReportStates((prev) => ({
       ...prev,
-      [flightId]: newState
+      [flightId]: newState,
     }));
   };
 
   const clearReportState = (flightId: string) => {
-    setReportStates(prev => {
+    setReportStates((prev) => {
       const newStates = { ...prev };
       delete newStates[flightId];
       return newStates;
@@ -98,8 +105,8 @@ export function useReportPersistence(): UseReportPersistenceReturn {
   };
 
   const hasUnsavedChanges = (
-    flightId: string, 
-    currentOperations: Record<string, { start: string; end: string }>, 
+    flightId: string,
+    currentOperations: Record<string, { start: string; end: string }>,
     currentNotes: string
   ): boolean => {
     const savedState = getReportState(flightId);
@@ -108,13 +115,13 @@ export function useReportPersistence(): UseReportPersistenceReturn {
     // Compare operations
     const savedOpsKeys = Object.keys(savedState.operations);
     const currentOpsKeys = Object.keys(currentOperations);
-    
+
     if (savedOpsKeys.length !== currentOpsKeys.length) return true;
-    
+
     for (const key of savedOpsKeys) {
       const savedOp = savedState.operations[key];
       const currentOp = currentOperations[key];
-      
+
       if (!currentOp || savedOp.start !== currentOp.start || savedOp.end !== currentOp.end) {
         return true;
       }
@@ -128,7 +135,7 @@ export function useReportPersistence(): UseReportPersistenceReturn {
     getReportState,
     saveReportState,
     clearReportState,
-    hasUnsavedChanges
+    hasUnsavedChanges,
   };
 }
 
@@ -143,45 +150,45 @@ export function useAutoSaveReport(
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [isInitialized, setIsInitialized] = useState(false);
   const [lastSavedData, setLastSavedData] = useState<string>('');
-  
+
   // Mark as initialized after first render to avoid saving initial state
   useEffect(() => {
     const timer = setTimeout(() => setIsInitialized(true), 500);
     return () => clearTimeout(timer);
   }, []);
-  
+
   useEffect(() => {
     if (!flightId || !isInitialized) return;
-    
+
     // Create a hash of current data to compare with last saved
     const currentDataHash = JSON.stringify({ operations, notes });
-    
+
     // Don't save if data hasn't changed
     if (currentDataHash === lastSavedData) {
       return;
     }
-    
+
     // Check if there's actual data to save
-    const hasOperationData = Object.keys(operations).some(key => 
-      operations[key]?.start?.trim() || operations[key]?.end?.trim()
+    const hasOperationData = Object.keys(operations).some(
+      (key) => operations[key]?.start?.trim() || operations[key]?.end?.trim()
     );
     const hasNoteData = notes.trim().length > 0;
     const hasData = hasOperationData || hasNoteData;
-    
+
     if (!hasData) {
       setSaveStatus('idle');
       return;
     }
-    
+
     // Only show saving status if we're actually going to save
     setSaveStatus('saving');
-    
+
     const timeoutId = setTimeout(() => {
       try {
         saveReportState(flightId, operations, notes);
         setLastSavedData(currentDataHash);
         setSaveStatus('saved');
-        
+
         // Reset to idle after a shorter time
         setTimeout(() => setSaveStatus('idle'), 1000);
       } catch (error) {
